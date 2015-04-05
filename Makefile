@@ -22,7 +22,7 @@ io.o:
 	$(AS) -f elf32 io.asm -o io.o
 
 bootpack.bin: bootpack.c io.o
-	cc -c -m32 -ffreestanding -fno-stack-protector -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs bootpack.c -o bootpack.o
+	cc -c -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs bootpack.c -o bootpack.o
 	ld -Ttext 0xc600 -Tdata 0xe540 -melf_i386 bootpack.o io.o --oformat binary -o bootpack.bin
 
 clean:
