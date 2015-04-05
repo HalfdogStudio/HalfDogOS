@@ -1,4 +1,5 @@
 [ORG 0xc400]
+[BITS 16]
 
 ; 第一个
 ;mov si, welmsg
@@ -46,6 +47,18 @@ int 0x16
 mov [leds], al
 
 end:
-    hlt
-    jmp end
+    call switch_to_pm
 
+[bits 32]
+%include "gdt.asm"
+%include "switch_to_pm.asm"
+%include "pm_print.asm"
+
+BEGIN_PM:   ;实模式终于开始了
+
+    mov esi, MSG_PROT_MODE
+    call print_string_pm
+
+    jmp 0xc600
+
+    MSG_PROT_MODE db "Successfully landed in 32-bit Protected Mode", 0xa, 0

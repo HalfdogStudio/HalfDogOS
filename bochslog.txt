@@ -31,7 +31,7 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: yes
 00000000000i[     ]   VGA extension support: vbe cirrus
-00000000000i[MEM0 ] allocated memory at 0x7f18cc758010. after alignment, vector=0x7f18cc759000
+00000000000i[MEM0 ] allocated memory at 0x7f40ebbc2010. after alignment, vector=0x7f40ebbc3000
 00000000000i[MEM0 ] 32.00MB
 00000000000i[MEM0 ] mem block size = 0x00100000, blocks=32
 00000000000i[MEM0 ] rom at 0xfffe0000/131072 ('/usr/share/bochs/BIOS-bochs-latest')
@@ -70,7 +70,7 @@
 00000000000i[PCI  ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Fri Apr  3 09:13:13 2015 (time0=1428023593)
+00000000000i[CMOS ] Setting initial clock to: Sun Apr  5 11:04:34 2015 (time0=1428203074)
 00000000000i[PLGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[PLGIN] init_dev of 'pic' plugin device by virtual method
@@ -188,5 +188,5 @@
 00000000000i[CPU0 ] | EIP=0000fff0 (0000fff0)
 00000000000i[CPU0 ] | CR0=0x60000010 CR2=0x00000000
 00000000000i[CPU0 ] | CR3=0x00000000 CR4=0x00000000
-00000000000i[CMOS ] Last time is 1428023593 (Fri Apr  3 09:13:13 2015)
+00000000000i[CMOS ] Last time is 1428203074 (Sun Apr  5 11:04:34 2015)
 00000000000i[CTRL ] quit_sim called with exit code 0

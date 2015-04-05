@@ -1,5 +1,22 @@
 ; boot.asm
 [BITS 16]
+%macro dprint_string 1
+    ;-------------
+    push si
+    mov si, word %1
+    call bios_print_string
+    pop si
+    ;----------------
+%endmacro
+%macro dprint_hex 1
+    ;-------------
+    push si
+    mov si, word %1
+    call bios_print_hex
+    pop si
+    ;----------------
+%endmacro
+
 cyls equ 10  ; 在bochs中我不能载入超过64个扇区,不知道为什么.参见我的有道云笔记.但qemu可以
 
 [ORG 0x7c00]
@@ -32,6 +49,11 @@ db 0x4d, 0x45, 0x20, 0x20, 0x20, 0x20, 0x46, 0x41, 0x54, 0x31, 0x32, 0x20, 0x20,
 entry:
     xor ax, ax  ; make it zero
     mov ds, ax
+    ; 准备栈
+    mov bp, 0x8000
+    mov sp, ax
+    mov si, MSG_REAL_MODE
+    call bios_print_string
     ;mov ax, 0x07c0
     ;mov ds, ax
     ; 不要假设什么,但似乎也没影响
@@ -67,7 +89,7 @@ retry:
     jnc next         ; 如果没进位就是成功
     add si, 1
     cmp si, 5
-    jae error
+    jae disk_error
     mov ah, 0x0
     mov dl, 0x0     ;驱动器号A
     int 0x13        ; 重置驱动器
@@ -90,27 +112,26 @@ next:
     cmp ch, cyls
     jb readloop
 
-    mov si, read_msg
-    jmp ch_loop
-
-error:
-    mov si, error_msg
-
-ch_loop:
-    lodsb
-    or al, al   ; zero=end or str
-    jz finish;    ; get out
-    mov ah, 0xe
-    int 0x10
-    jmp ch_loop
-
-finish:
+    dprint_string read_msg
     mov [0x0ff0], ch
+    ; halfdog.bin的位置
+    dprint_hex 0xc400
+    ; 下一个512字节位置
     jmp 0xc400
 
-error_msg db 'Load error:(', 0xa, 0
-read_msg db 'Read finished:)', 0xa, 0
+disk_error:
+    dprint_string disk_error_msg
+    jmp $
+
+disk_error_msg db "Load error:(", 0xa, 0
+read_msg db "Read disk finished:)", 0xa, 0
+
+%include "bios_print.asm"
+
+MSG_REAL_MODE db "Started in 16-bit Real Mode", 0xa, 0
 
     times 510-($-$$) db 0   ;2 bytes less
     db 0x55
     db 0xaa
+    ;dw 0xaa55
+
