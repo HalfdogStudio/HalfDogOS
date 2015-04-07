@@ -19,6 +19,12 @@ global io_out32
 ; eflags
 global io_load_eflags
 global io_store_eflags
+; load gdtr&idtr
+global load_gdtr
+global load_idtr
+; int handler
+global asm_inthandler21
+extern inthandler21
 
 ;------------------------------------
 io_hlt:
@@ -88,6 +94,35 @@ io_store_eflags:    ;void io_store_eflags(int eflags)
     popfd
     ret
 
+load_gdtr:
+    mov ax, [esp+4]
+    mov [esp+6], ax
+    lgdt [esp+6]
+    ret
+
+load_idtr:
+    mov ax, [esp+4]
+    mov [esp+6], ax
+    lidt [esp+6]
+    ret
+
+;---------------------------------
+; int handler
+asm_inthandler21:
+    push es
+    push ds
+    pushad      ; 中断处理完成要返回中断发生地方,需要保存现场
+    mov eax, esp
+    push eax
+    mov ax, ss
+    mov ds, ax
+    mov es, ax  ;c编译器默认ds=es=ss
+    call inthandler21
+    pop eax
+    popad
+    pop ds
+    pop es
+    iretd
 
 write_mem8:
     mov ecx, [esp+4]
