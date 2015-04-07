@@ -35,14 +35,36 @@ void putfont8_hex(unsigned char *vram, int xsize, int x, int y, char c, unsigned
 void init_mouse_cursor8(unsigned char *mouse, char bc);
 void putblock8_8(unsigned char *vram, int vxsize, int pxsize, int pysize,
         int px0, int py0, unsigned char *buf, int bxsize);
-// 键盘中断
-#define PORT_KEYDAT 0x0060
-struct KEYBUF {
-    unsigned char data;     //缓冲数据
-    unsigned char flag;     //是否已使用
+// 中断所需FIFO
+struct FIFO8 {
+    unsigned char *buf;     //缓冲数据
+    int p;                  // 写指针
+    int q;                  // 读指针
+    int size;
+    int free;
+    int flags;
 };
+void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf);
+int fifo8_put(struct FIFO8 *fifo, unsigned char data);
+int fifo8_get(struct FIFO8 *fifo);
+int fifo8_status(struct FIFO8 *fifo);
+// 鼠标键盘
+struct FIFO8 keyinfo;   // FIFO8结构体
+struct FIFO8 mouseinfo;   // FIFO8结构体
+#define PORT_KEYDAT 0x0060
+#define PORT_KEYSTA 0x0064
+#define PORT_KEYCMD 0x0064
+#define KEYSTA_SEND_NOTREADY 0x02
+#define KEYCMD_WRITE_MODE 0x60
+#define KBC_MODE 0x47
 
-struct KEYBUF keybuf;
+#define KEYCMD_SENDTO_MOUSE 0xd4
+#define MOUSECMD_ENABLE 0xf4
+
+void wait_KBC_sendready(void);
+void init_keyboard(void);
+void enable_mouse(void);
+
 // 启动信息
 struct BOOTINFO {
     char cyls, leds, vmode, reserve;
@@ -73,3 +95,4 @@ void load_idtr(int limit, int addr);
 // init PIC
 void init_pic(void);
 void asm_inthandler21(void);
+void asm_inthandler2c(void);

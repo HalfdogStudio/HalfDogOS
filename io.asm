@@ -25,6 +25,8 @@ global load_idtr
 ; int handler
 global asm_inthandler21
 extern inthandler21
+global asm_inthandler2c
+extern inthandler2c
 
 ;------------------------------------
 io_hlt:
@@ -118,6 +120,22 @@ asm_inthandler21:
     mov ds, ax
     mov es, ax  ;c编译器默认ds=es=ss
     call inthandler21
+    pop eax
+    popad
+    pop ds
+    pop es
+    iretd
+
+asm_inthandler2c:
+    push es
+    push ds
+    pushad      ; 中断处理完成要返回中断发生地方,需要保存现场
+    mov eax, esp
+    push eax
+    mov ax, ss
+    mov ds, ax
+    mov es, ax  ;c编译器默认ds=es=ss
+    call inthandler2c
     pop eax
     popad
     pop ds
