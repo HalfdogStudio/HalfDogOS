@@ -71,3 +71,11 @@ BEGIN_PM:   ;实模式终于开始了
 
 
     ;MSG_PROT_MODE db "Successfully landed in 32-bit Protected Mode", 0xa, 0
+
+waitkbdout:
+    in al, 0x64
+    and al, 0x02
+    in al, 0x60 ;空读,清楚数据缓冲区垃圾
+    jnz waitkbdout
+    ret
+

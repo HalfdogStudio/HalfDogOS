@@ -17,11 +17,11 @@ switch_to_pm:
     or eax, 0x1     ; 设置CR0最低位为1
     mov cr0, eax
 
-    jmp CODE_SEG:init_pm    ;far jump(比如新的段,清空流水线)
+    jmp init_pm    ;far jump(比如新的段,清空流水线)
 
-[bits 32]
 ; 初始化保护模式中使用的寄存器和栈
 init_pm:
+[cpu 486]
     mov ax, DATA_SEG        ;在保护模式中,段寄存器中是GDT中偏移地址
     mov ds, ax
     mov ss, ax
@@ -53,7 +53,7 @@ init_pm:
     mov ebp, 0x00310000        ;更新栈空间
     mov esp, ebp
 
-    jmp BEGIN_PM
+    jmp CODE_SEG:BEGIN_PM
 
 memcpy:
     mov eax, [esi]
@@ -62,12 +62,5 @@ memcpy:
     add edi, 4
     sub ecx, 1
     jnz memcpy
-    ret
-
-waitkbdout:
-    in al, 0x64
-    and al, 0x02
-    in al, 0x60 ;空读,清楚数据缓冲区垃圾
-    jnz waitkbdout
     ret
 

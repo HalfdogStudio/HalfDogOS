@@ -1,3 +1,4 @@
+[bits 16]
 ;GDT
 ; 发现我对GDT的理解有误,参见有道云笔记 (http://note.youdao.com/share/?id=fc82ff38b404868cb7f8df2eec2e7bb7&type=note)
 
@@ -26,7 +27,7 @@ gdt_code: ; code segment descriptor
     ; 2nd flags: (granularity)1 (32bit default)1 (64-bit seg)0 (AVL)0->0011b
     dw 0xffff      ;limit (bits 0-15)
     dw 0x0000          ;Base(bits 0-15)
-    db 0x00          ;Base(bits 16-23)
+    db 0x28          ;Base(bits 16-23)
     db 0x9a    ;1st flags, type flags
     db 0x47    ;2nd flags, Limit(bits 16-19)
     db 0x00          ; base(bits 24-31)
