@@ -20,7 +20,7 @@ gdt_data: ; code segment descriptor
     db 0x0          ; base(bits 24-31)
 
 gdt_code: ; code segment descriptor
-    ; base=0x280000, limit=0xfffff
+    ; base=0x000000, limit=0xfffff
     ; 1st flag:(present)1 (privilege)00 (descriptor type)1 -> 1001b
     ; type flags: (code)1 (conforming)0 (readable)1 (accessed)0 -> 1010b
     ; 2nd flags: (granularity)1 (32bit default)1 (64-bit seg)0 (AVL)0->0011b

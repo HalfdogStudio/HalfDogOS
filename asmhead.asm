@@ -48,9 +48,14 @@ mov ah, 0x02
 int 0x16
 
 mov [leds], al
+;--------------------------------
+; PIC关闭一切中断
+mov al, 0xff
+out 0x21, al    ;禁止PIC0中断
+nop     ;某些奇葩机种不能连续out
+out 0xa1, al    ;禁止PIC1中断
 
-end:
-    call switch_to_pm
+call switch_to_pm
 
 [bits 32]
 %include "gdt.asm"
@@ -59,40 +64,10 @@ end:
 
 BEGIN_PM:   ;实模式终于开始了
 
+    ;更新CS
+    jmp CODE_SEG:0xc600
     ;mov esi, MSG_PROT_MODE
     ;call print_string_pm
 
-    ; 准备把bootpack映射到0x280000
-    mov esi, 0xc600
-    mov edi, BOOTPACK + 0xc600
-    mov ecx, 512*1024/4
-    call memcpy
-
-    ; 准备把ipl映射到0x7c00
-    mov esi, 0x7c00
-    mov edi, DSKCAC
-    mov ecx, 512/4
-    call memcpy
-
-    ; 准备把512字节之后映射到0x8000
-    mov esi, DSKCAC0+512
-    mov edi, DSKCAC+512
-    mov ecx, 0
-    mov cl, byte [cyls]
-    imul ecx, 512*18*2/4
-    sub ecx, 512/4
-    call memcpy
-    ; 准备栈
-    mov esp, 0x00310000
-    jmp 0xc600
-
-memcpy:
-    mov eax, [esi]
-    add esi, 4
-    mov [edi], eax
-    add edi, 4
-    sub ecx, 1
-    jnz memcpy
-    ret
 
     ;MSG_PROT_MODE db "Successfully landed in 32-bit Protected Mode", 0xa, 0
