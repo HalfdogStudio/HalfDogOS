@@ -19,6 +19,9 @@ global io_out32
 ; eflags
 global io_load_eflags
 global io_store_eflags
+; cr0
+global load_cr0
+global store_cr0
 ; load gdtr&idtr
 global load_gdtr
 global load_idtr
@@ -141,6 +144,17 @@ asm_inthandler2c:
     pop ds
     pop es
     iretd
+
+;---------------------
+; cr0 load and store
+load_cr0:
+    mov eax, cr0
+    ret
+
+store_cr0:
+    mov eax, [esp+4]
+    mov cr0, eax
+    ret
 
 write_mem8:
     mov ecx, [esp+4]

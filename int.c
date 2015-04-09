@@ -19,31 +19,3 @@ void init_pic(void){
     return;
 }
 
-void inthandler21(int *esp){
-    // 来自键盘的中断0x21
-    unsigned char data;     // 键盘中断数据
-    //struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-
-    io_out8(PIC0_OCW2, 0x61);   //通知IRQ-1已经受理完毕
-    data = io_in8(PORT_KEYDAT);
-    fifo8_put(&keyinfo, data);
-    // 不把屏幕渲染放入中断处理中
-    //boxfill8(binfo->vram, binfo->scrnx, COL8_BLACK, 0, 0, 32 * 8 - 1, 15);
-    //putfont8_asc(binfo->vram, binfo->scrnx, 123, 3, COL8_WHITE, "INT 21 (IQR-1) : PS/2 Keyboard");
-    //
-    //putfont8_hex(binfo->vram, binfo->scrnx, 3, 3, COL8_WHITE, (unsigned char *)&data);
-    return;
-}
-
-void inthandler2c(int *esp){
-    unsigned char data;
-    //struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
-    //boxfill8(binfo->vram, binfo->scrnx, COL8_BLACK, 0, 0, 32 * 8 - 1, 16);
-    //putfont8_asc(binfo->vram, binfo->scrnx, 123, 3, COL8_WHITE, "INT 2C (IQR-12) : PS/2 MOUSE");
-    io_out8(PIC1_OCW2, 0x64);       // 通知PIC1 IRQ-12已经受理
-    io_out8(PIC0_OCW2, 0x62);       // 通知PIC0 IRQ-2已经受理
-    data = io_in8(PORT_KEYDAT);
-    fifo8_put(&mouseinfo, data);
-    return;
-}
-
