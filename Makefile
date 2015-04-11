@@ -1,7 +1,7 @@
 AS = nasm
 ASFLAGS = -f bin
 CC = gcc
-OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o
+OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o libc.a
 CFLAGS = -c -m32 -nostartfiles -fno-stack-protector -ffreestanding
 
 all: halfdogos.bin

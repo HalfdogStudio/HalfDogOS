@@ -5,10 +5,11 @@ void HalfDogMain(void){
 
     struct BOOTINFO *binfo = (struct BOOTINFO *)0x0ff0;
     extern char hankaku[4096];
-    //unsigned char mcursor[16 * 16];//就此才发现[16][16]与[16*16]区别
+    //字符缓冲区
+    unsigned char s[40];
     // 键盘鼠标中断变量
     int i; //存放键盘数据
-    char s[40], keybuf[32], mousebuf[128];
+    char keybuf[32], mousebuf[128];
     struct MOUSE_DEC mdec;
     int mx, my;     //鼠标
     // 内存
@@ -16,7 +17,7 @@ void HalfDogMain(void){
     // 图层管理
     struct SHTCTL *shtctl;
     struct SHEET *sht_back, *sht_mouse;
-    unsigned char *buf_back, buf_mouse[256];    //16x16的鼠标大小
+    unsigned char *buf_back, buf_mouse[16 * 16];    //16x16的鼠标大小
 
     init_gdtidt();
     init_pic();
@@ -30,12 +31,11 @@ void HalfDogMain(void){
     enable_mouse(&mdec);
 
     unsigned int memtotal;
-    memtotal = memtest(0x00400000, 0xbfffffff) / 1024 / 1024;
+    memtotal = memtest(0x00400000, 0xbfffffff);
     // 初始化内存管理
     memman_init(memman);
     // 分配可用内存
-    //memman_free(memman, 0x00001000, 0x0009e000); //0x00001000-0x0009efff
-    memman_free(memman, 0x00400000, memtotal * 1024 * 1024 - 0x00400000); //
+    memman_free(memman, 0x00400000, memtotal - 0x00400000); //
     // 初始化图形界面
     init_palette(); // 调色板
     shtctl = shtctl_init(memman, binfo->vram,
@@ -58,8 +58,13 @@ void HalfDogMain(void){
     sheet_updown(shtctl, sht_back, 0);
     sheet_updown(shtctl, sht_mouse, 1);
 
-    putfont8_asc(buf_back, binfo->scrnx, 60, 60, COL8_WHITE, "HalfDog");
-    sheet_refresh(shtctl);
+    sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
+            memman_total(memman) / 1024);
+    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
+
+    sprintf(s, "(%3d, %3d)", mx, my);
+    putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
+    sheet_refresh(shtctl, sht_back, 3, 63, binfo->scrnx, 133);
 
     for(;;){
         io_cli();                   //禁止中断
@@ -71,7 +76,7 @@ void HalfDogMain(void){
                 io_sti();               //恢复中断,不因为图像处理阻塞
                 boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 0, 0, 32 * 8 - 1, 16);
                 putfont8_hex(buf_back, binfo->scrnx, 3, 3, COL8_WHITE, (unsigned char *)&i);
-                sheet_refresh(shtctl);
+                sheet_refresh(shtctl, sht_back, 0, 0, 48, 30);
             } else if (fifo8_status(&mouseinfo) != 0){
                 i = fifo8_get(&mouseinfo);
                 io_sti();               //恢复中断,不因为图像处理阻塞
@@ -103,6 +108,10 @@ void HalfDogMain(void){
                         my = binfo->scrny - 16;
                     }
                     sheet_slide(shtctl, sht_mouse, mx, my);
+                    sprintf(s, "(%3d, %3d)", mx, my);
+                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 93, binfo->scrnx-1, 123);
+                    putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
+                    sheet_refresh(shtctl, sht_back, 3, 13, 153, 123);
                 }
             }
         }
