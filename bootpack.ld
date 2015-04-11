@@ -8,20 +8,8 @@ SECTIONS {
         *(.text*)
     }
 
-    . = 0xe540;
     .data  :
     {
         *(.data)
-    }
-
-    .rodata  :
-    {
-        *(.rodata*)
-    }
-
-    .bss  :
-    {
-        *(COMMON)
-        *(.bss)
     }
 }

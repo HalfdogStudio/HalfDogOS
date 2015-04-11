@@ -100,6 +100,39 @@ int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size);
 unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size);
 int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size);
 
+// 图层
+// 图层信息结构体
+struct SHEET {
+    unsigned char *buf;     // 图层内容保存在这里
+    int bxsize, bysize;     //图像大小(缓冲区)
+    int vx0, vy0;           //图层位置
+    int col_inv;            //透明色
+    int height;             //图层高度
+    int flags;              //是否在使用
+};
+//图层信息管理结构体
+#define MAX_SHEETS 256
+struct SHTCTL {
+    unsigned char * vram;   //vga缓冲区地址
+    int xsize, ysize;
+    int top;    //当前最高高度
+    struct SHEET *sheets[MAX_SHEETS];   //地址数组,用来按高度排序图层
+    struct SHEET sheets0[MAX_SHEETS];    //实际保存图层信息
+};
+// 初始化图层管理结构体
+struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize);
+//取得新生成的未使用图层
+#define SHEET_USE 1
+struct SHEET *sheet_alloc(struct SHTCTL *ctl);
+// 设置图层缓冲区大小和透明色
+void sheet_setbuf(struct SHEET *sht, unsigned char *buf,
+        int xsize, int ysize, int col_inv);
+// 设定图层高度
+void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height);
+void sheet_refresh(struct SHTCTL *ctl);
+void sheet_slide(struct SHTCTL *ctl, struct SHEET *sht, int vx0, int vy0);
+void sheet_free(struct SHTCTL *ctl, struct SHEET *sht);
+
 // 启动信息
 struct BOOTINFO {
     char cyls, leds, vmode, reserve;
