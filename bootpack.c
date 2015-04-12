@@ -1,5 +1,6 @@
 #include "bootpack.h"
 
+void make_window8(unsigned char *buf, int xsize, int ysize, char *title);
 // entry_point
 void HalfDogMain(void){
 
@@ -16,8 +17,8 @@ void HalfDogMain(void){
     struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
     // 图层管理
     struct SHTCTL *shtctl;
-    struct SHEET *sht_back, *sht_mouse;
-    unsigned char *buf_back, buf_mouse[16 * 16];    //16x16的鼠标大小
+    struct SHEET *sht_back, *sht_mouse, *sht_win;
+    unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
 
     init_gdtidt();
     init_pic();
@@ -42,21 +43,34 @@ void HalfDogMain(void){
             binfo->scrnx, binfo->scrny);    //初始化图层管理结构
     sht_back = sheet_alloc(shtctl);
     sht_mouse = sheet_alloc(shtctl);
+    sht_win = sheet_alloc(shtctl);
+
     buf_back = (unsigned char *)memman_alloc_4k(memman, binfo->scrnx * binfo->scrny);   //320*200字节
+    buf_win = (unsigned char *)memman_alloc_4k(memman, 160 * 8);
+
     sheet_setbuf(sht_back, buf_back, binfo->scrnx, binfo->scrny, -1);   //没有透明色
     sheet_setbuf(sht_mouse, buf_mouse, 16, 16, 99); //透明色号99
+    sheet_setbuf(sht_win, buf_win, 160, 68, -1);    //没有透明色
 
     init_screen8(buf_back, binfo->scrnx, binfo->scrny);
 
     init_mouse_cursor8(buf_mouse, 99);
+
+    make_window8(buf_win, 160, 68, "window");
+    putfont8_asc(buf_win, 160, 24, 28, COL8_BLACK, "Welcome to");
+    putfont8_asc(buf_win, 160, 24, 44, COL8_BLACK, "HalfDog OS!");
+
     sheet_slide(sht_back, 0, 0);    //背景
 
     mx = (binfo->scrnx - 16) / 2;   //显示到画面中央
     my = (binfo->scrny - 16 - 28) / 2;   //显示到画面中央
 
     sheet_slide(sht_mouse, mx, my);
+    sheet_slide(sht_win, 80, 72);
+
     sheet_updown(sht_back, 0);
-    sheet_updown(sht_mouse, 1);
+    sheet_updown(sht_win, 1);
+    sheet_updown(sht_mouse, 2);
 
     sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
             memman_total(memman) / 1024);
@@ -121,3 +135,52 @@ void HalfDogMain(void){
     }
 }
 
+
+void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
+    static char closebtn[14][16] = {
+        "OOOOOOOOOOOOOOO@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQ@@QQQQ@@QQ$@",
+        "OQQQQ@@QQ@@QQQ$@",
+        "OQQQQQ@@@@QQQQ$@",
+        "OQQQQQQ@@QQQQQ$@",
+        "OQQQQQ@@@@QQQQ$@",
+        "OQQQQ@@QQ@@QQQ$@",
+        "OQQQ@@QQQQ@@QQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "O$$$$$$$$$$$$$$@",
+        "@@@@@@@@@@@@@@@@"
+    };
+    int x, y;
+    char c; //色彩
+    boxfill8(buf, xsize, COL8_GRAY, 0, 0, xsize - 1, 0);
+    boxfill8(buf, xsize, COL8_WHITE, 1, 1, xsize - 2, 1);
+    boxfill8(buf, xsize, COL8_GRAY, 0, 0, 0, ysize - 1);
+    boxfill8(buf, xsize, COL8_WHITE, 1, 1, 1, ysize - 2);
+    boxfill8(buf, xsize, COL8_DARK_GRAY, xsize - 2, 1, xsize - 2, ysize - 2);
+    boxfill8(buf, xsize, COL8_BLACK, xsize - 1, 0, xsize - 1, ysize - 1);
+    boxfill8(buf, xsize, COL8_GRAY, 2, 2, xsize - 3, ysize - 3);
+    boxfill8(buf, xsize, COL8_DARK_BLUE, 3, 3, xsize - 4, 20);
+    boxfill8(buf, xsize, COL8_DARK_GRAY, 1, ysize - 2, xsize - 2, ysize - 2);
+    boxfill8(buf, xsize, COL8_BLACK, 0, ysize - 1, xsize - 1, ysize - 1);
+    putfont8_asc(buf, xsize, 24, 4, COL8_WHITE, title);
+    // 按钮
+    for (y = 0; y < 14; y++) {
+        for (x = 0; x < 16; x++) {
+            c = closebtn[y][x];
+            if (c == '@') {
+                c = COL8_BLACK;
+            } else if (c == '$') {
+                c = COL8_DARK_GRAY;
+            } else if (c == 'Q') {
+                c = COL8_GRAY;
+            } else {
+                c = COL8_WHITE;
+            }
+            buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
+        }
+    }
+    return;
+}
