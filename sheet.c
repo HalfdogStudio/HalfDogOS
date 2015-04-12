@@ -134,6 +134,18 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1){
     unsigned char *vram = ctl->vram;
     struct SHEET *sht;
     //修正超出画面范围
+    if (vx0 < 0) {
+        vx0 = 0;
+    }
+    if (vy0 = 0) {
+        vy0 = 0;
+    }
+    if (vx1 > ctl->xsize) {
+        vx1 = ctl->xsize;
+    }
+    if (vy1 > ctl->ysize) {
+        vy1 = ctl->ysize;
+    }
     for (h = 0; h <= ctl->top; h++) {   //包含顶层
         sht = ctl->sheets[h];
         buf = sht->buf;
