@@ -95,23 +95,26 @@ void HalfDogMain(void){
                     putfont8_asc(buf_back, binfo->scrnx, 3, 19, COL8_WHITE, mouse_status);
                     mx += mdec.x;
                     my += mdec.y;
-                    if (mx < 0) {
-                        mx = 0;
+                    if (mx < -15) {
+                        mx = -15;
                     }
-                    if (mx > binfo->scrnx - 16) {
-                        mx = binfo->scrnx - 16;
+                    if (mx > binfo->scrnx - 1) {
+                        mx = binfo->scrnx - 1;
                     }
-                    if (my < 0) {
-                        my = 0;
+                    if (my < -15) {
+                        my = -15;
                     }
-                    if (my > binfo->scrny - 16) {
-                        my = binfo->scrny - 16;
+                    if (my > binfo->scrny - 1) {
+                        my = binfo->scrny - 1;
                     }
-                    sheet_slide(shtctl, sht_mouse, mx, my);
+                    //鼠标位置
                     sprintf(s, "(%3d, %3d)", mx, my);
                     boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 93, binfo->scrnx-1, 123);
                     putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
+                    // 刷新鼠标状态和位置
                     sheet_refresh(shtctl, sht_back, 3, 13, 153, 123);
+                    // 移动鼠标
+                    sheet_slide(shtctl, sht_mouse, mx, my);
                 }
             }
         }
