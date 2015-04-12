@@ -49,14 +49,14 @@ void HalfDogMain(void){
     init_screen8(buf_back, binfo->scrnx, binfo->scrny);
 
     init_mouse_cursor8(buf_mouse, 99);
-    sheet_slide(shtctl, sht_back, 0, 0);    //背景
+    sheet_slide(sht_back, 0, 0);    //背景
 
     mx = (binfo->scrnx - 16) / 2;   //显示到画面中央
     my = (binfo->scrny - 16 - 28) / 2;   //显示到画面中央
 
-    sheet_slide(shtctl, sht_mouse, mx, my);
-    sheet_updown(shtctl, sht_back, 0);
-    sheet_updown(shtctl, sht_mouse, 1);
+    sheet_slide(sht_mouse, mx, my);
+    sheet_updown(sht_back, 0);
+    sheet_updown(sht_mouse, 1);
 
     sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
             memman_total(memman) / 1024);
@@ -64,7 +64,7 @@ void HalfDogMain(void){
 
     sprintf(s, "(%3d, %3d)", mx, my);
     putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
-    sheet_refresh(shtctl, sht_back, 3, 63, binfo->scrnx, 133);
+    sheet_refresh(sht_back, 3, 63, binfo->scrnx, 133);
 
     for(;;){
         io_cli();                   //禁止中断
@@ -76,7 +76,7 @@ void HalfDogMain(void){
                 io_sti();               //恢复中断,不因为图像处理阻塞
                 boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 0, 0, 32 * 8 - 1, 16);
                 putfont8_hex(buf_back, binfo->scrnx, 3, 3, COL8_WHITE, (unsigned char *)&i);
-                sheet_refresh(shtctl, sht_back, 0, 0, 48, 30);
+                sheet_refresh(sht_back, 0, 0, 48, 30);
             } else if (fifo8_status(&mouseinfo) != 0){
                 i = fifo8_get(&mouseinfo);
                 io_sti();               //恢复中断,不因为图像处理阻塞
@@ -112,9 +112,9 @@ void HalfDogMain(void){
                     boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 93, binfo->scrnx-1, 123);
                     putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
                     // 刷新鼠标状态和位置
-                    sheet_refresh(shtctl, sht_back, 3, 13, 153, 123);
+                    sheet_refresh(sht_back, 3, 13, 153, 123);
                     // 移动鼠标
-                    sheet_slide(shtctl, sht_mouse, mx, my);
+                    sheet_slide(sht_mouse, mx, my);
                 }
             }
         }

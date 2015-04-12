@@ -13,6 +13,7 @@ struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize
     ctl->top = -1;      // 一个sheet也没有
     for (i = 0; i < MAX_SHEETS; i++) {
         ctl->sheets0[i].flags = 0;   //全标记为未使用
+        ctl->sheets0[i].ctl = ctl;  //记录所属的ctl
     }
 err:
     return ctl;
@@ -41,9 +42,10 @@ void sheet_setbuf(struct SHEET *sht, unsigned char *buf,
     return;
 }
 
-void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height){
+void sheet_updown(struct SHEET *sht, int height){
     int h;
     int old = sht->height;
+    struct SHTCTL *ctl = sht->ctl;
     //修正height不超出边界
     if (height > ctl->top + 1) {
         height = ctl->top + 1;
@@ -72,7 +74,7 @@ void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height){
             }   //在顶层就不用管,只ctl->top--就够了
             ctl->top--;
         }
-        sheet_refresh(ctl, sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize); //重绘界面
+        sheet_refresh(sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize); //重绘界面
     } else if (height > old) {  //新位置比老位置高
         if (old >= 0){          //老位置不是隐藏
             //把old+1到height下拉
@@ -90,38 +92,38 @@ void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height){
             ctl->sheets[height] = sht;
             ctl->top++; //更新top
         }
-        sheet_refresh(ctl, sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize);
+        sheet_refresh(sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize);
     }   //再就是=old了,什么也不做
     return;
 }
 
-void sheet_refresh(struct SHTCTL *ctl, struct SHEET *sht,
+void sheet_refresh(struct SHEET *sht,
         int bx0, int by0, int bx1, int by1){
     // 只更新sht中buf对应的范围bx-by内区域
     if (sht->height >= 0) {
-        sheet_refreshsub(ctl, sht->vx0 + bx0, sht->vy0 + by0,
+        sheet_refreshsub(sht->ctl, sht->vx0 + bx0, sht->vy0 + by0,
                 sht->vx0 + bx1, sht->vy0 + by1);
     }
     return;
 }
 
-void sheet_slide(struct SHTCTL *ctl, struct SHEET *sht, int vx0, int vy0){
+void sheet_slide(struct SHEET *sht, int vx0, int vy0){
     //旧位置
     int old_vx0 = sht->vx0, old_vy0 = sht->vy0;
     sht->vx0 = vx0;
     sht->vy0 = vy0;
     if (sht->height >= 0) {
-        sheet_refreshsub(ctl, old_vx0, old_vy0,
+        sheet_refreshsub(sht->ctl, old_vx0, old_vy0,
                 old_vx0 + sht->bxsize, old_vy0 + sht->bysize);
-        sheet_refreshsub(ctl, vx0, vy0,
+        sheet_refreshsub(sht->ctl, vx0, vy0,
                 vx0 + sht->bxsize, vy0 + sht->bysize);
     }
     return;
 }
 
-void sheet_free(struct SHTCTL *ctl, struct SHEET *sht){
+void sheet_free(struct SHEET *sht){
     if (sht->height >= 0) {
-        sheet_updown(ctl, sht, -1); // 若显示则设为隐藏
+        sheet_updown(sht, -1); // 若显示则设为隐藏
     }
     sht->flags = 0;
     return;

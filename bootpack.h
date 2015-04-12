@@ -109,6 +109,7 @@ struct SHEET {
     int col_inv;            //透明色
     int height;             //图层高度
     int flags;              //是否在使用
+    struct SHTCTL *ctl;
 };
 //图层信息管理结构体
 #define MAX_SHEETS 256
@@ -128,12 +129,12 @@ struct SHEET *sheet_alloc(struct SHTCTL *ctl);
 void sheet_setbuf(struct SHEET *sht, unsigned char *buf,
         int xsize, int ysize, int col_inv);
 // 设定图层高度
-void sheet_updown(struct SHTCTL *ctl, struct SHEET *sht, int height);
-void sheet_refresh(struct SHTCTL *ctl, struct SHEET *sht,
+void sheet_updown(struct SHEET *sht, int height);
+void sheet_refresh(struct SHEET *sht,
         int bx0, int by0, int bx1, int by1);
 void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1);
-void sheet_slide(struct SHTCTL *ctl, struct SHEET *sht, int vx0, int vy0);
-void sheet_free(struct SHTCTL *ctl, struct SHEET *sht);
+void sheet_slide(struct SHEET *sht, int vx0, int vy0);
+void sheet_free(struct SHEET *sht);
 
 // 启动信息
 struct BOOTINFO {
