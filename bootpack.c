@@ -74,11 +74,11 @@ void HalfDogMain(void){
 
     sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
             memman_total(memman) / 1024);
-    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
+    putfont8_asc(buf_back, binfo->scrnx, 3, 33, COL8_WHITE, s);
 
     sprintf(s, "(%3d, %3d)", mx, my);
-    putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
-    sheet_refresh(sht_back, 3, 63, binfo->scrnx, 133);
+    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
+    sheet_refresh(sht_back, 3, 33, binfo->scrnx, binfo->scrny);
 
     for(;;){
         io_cli();                   //禁止中断
@@ -123,8 +123,8 @@ void HalfDogMain(void){
                     }
                     //鼠标位置
                     sprintf(s, "(%3d, %3d)", mx, my);
-                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 93, binfo->scrnx-1, 123);
-                    putfont8_asc(buf_back, binfo->scrnx, 3, 93, COL8_WHITE, s);
+                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 63, binfo->scrnx-1, 123);
+                    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
                     // 刷新鼠标状态和位置
                     sheet_refresh(sht_back, 3, 13, 153, 123);
                     // 移动鼠标

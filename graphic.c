@@ -52,22 +52,20 @@ void boxfill8(unsigned char *vram, int xsize, unsigned char c,
 }
 
 void init_screen8(unsigned char *vram, int xsize, int ysize){
-    boxfill8(vram, xsize, COL8_DARK_CYAN, 0, 0, xsize - 1, ysize - 29);
-    boxfill8(vram, xsize, COL8_GRAY, 0, ysize - 28, xsize - 1, ysize - 28);
-    boxfill8(vram, xsize, COL8_DARK_GRAY, 0, ysize - 27, xsize - 1, ysize - 1);
-    // button shade up
-    boxfill8(vram, xsize, COL8_GRAY, 3, ysize - 24, 59, ysize - 4);
-    // button shade down
-    boxfill8(vram, xsize, COL8_BLACK, 5, ysize - 22, 60, ysize - 3);
-    // button
-    boxfill8(vram, xsize, COL8_DARK_GRAY, 4, ysize - 23, 59, ysize - 4);
-
-    // button shade up
-    boxfill8(vram, xsize, COL8_BLACK, xsize - 47, ysize - 24, xsize - 4, ysize - 4);
-    // button shade down
-    boxfill8(vram, xsize, COL8_WHITE, xsize - 46, ysize - 22, xsize - 3, ysize - 3);
-    // button
-    boxfill8(vram, xsize, COL8_DARK_GRAY, xsize - 46, ysize - 23, xsize - 4, ysize - 4);
+    boxfill8(vram, xsize, COL8_DARK_CYAN, 0, 0, xsize-1, ysize-29);
+    boxfill8(vram, xsize, COL8_GRAY, 0, ysize-28, xsize-1, ysize-28);
+    boxfill8(vram, xsize, COL8_WHITE, 0, ysize-27, xsize-1, ysize-27);
+    boxfill8(vram, xsize, COL8_GRAY, 0, ysize-26, xsize-1, ysize-1);
+    boxfill8(vram, xsize, COL8_WHITE, 3, ysize-24, 59, ysize-24);
+    boxfill8(vram, xsize, COL8_WHITE, 2, ysize-24, 2, ysize-4);
+    boxfill8(vram, xsize, COL8_DARK_GRAY, 3, ysize-4, 59, ysize-4);
+    boxfill8(vram, xsize, COL8_DARK_GRAY, 59, ysize-23, 59, ysize-5);
+    boxfill8(vram, xsize, COL8_BLACK, 2, ysize-3, 59, ysize-3);
+    boxfill8(vram, xsize, COL8_BLACK, 60, ysize-24, 60, ysize-3);
+    boxfill8(vram, xsize, COL8_DARK_GRAY, xsize-47, ysize-24, xsize-4, ysize-24);
+    boxfill8(vram, xsize, COL8_DARK_GRAY, xsize-47, ysize-23, xsize-47, ysize-4);
+    boxfill8(vram, xsize, COL8_WHITE, xsize-47, ysize-3, xsize-4, ysize-3);
+    boxfill8(vram, xsize, COL8_WHITE, xsize-3, ysize-24, xsize-3, ysize-3);
 }
 
 void putfont8(unsigned char *vram, int xsize, int x, int y, unsigned char c, char *font){
