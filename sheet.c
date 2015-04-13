@@ -74,7 +74,7 @@ void sheet_updown(struct SHEET *sht, int height){
             }   //在顶层就不用管,只ctl->top--就够了
             ctl->top--;
         }
-        sheet_refresh(sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize); //重绘界面
+        sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, height + 1); //重绘界面
     } else if (height > old) {  //新位置比老位置高
         if (old >= 0){          //老位置不是隐藏
             //把old+1到height下拉
@@ -92,7 +92,7 @@ void sheet_updown(struct SHEET *sht, int height){
             ctl->sheets[height] = sht;
             ctl->top++; //更新top
         }
-        sheet_refresh(sht, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize);
+        sheet_refreshsub(ctl, sht->vx0, sht->vy0, sht->vx0 + sht->bxsize, sht->vy0 + sht->bysize, height);
     }   //再就是=old了,什么也不做
     return;
 }
@@ -102,7 +102,7 @@ void sheet_refresh(struct SHEET *sht,
     // 只更新sht中buf对应的范围bx-by内区域
     if (sht->height >= 0) {
         sheet_refreshsub(sht->ctl, sht->vx0 + bx0, sht->vy0 + by0,
-                sht->vx0 + bx1, sht->vy0 + by1);
+                sht->vx0 + bx1, sht->vy0 + by1, sht->height);
     }
     return;
 }
@@ -114,9 +114,9 @@ void sheet_slide(struct SHEET *sht, int vx0, int vy0){
     sht->vy0 = vy0;
     if (sht->height >= 0) {
         sheet_refreshsub(sht->ctl, old_vx0, old_vy0,
-                old_vx0 + sht->bxsize, old_vy0 + sht->bysize);
+                old_vx0 + sht->bxsize, old_vy0 + sht->bysize, 0);
         sheet_refreshsub(sht->ctl, vx0, vy0,
-                vx0 + sht->bxsize, vy0 + sht->bysize);
+                vx0 + sht->bxsize, vy0 + sht->bysize, sht->height);
     }
     return;
 }
@@ -129,7 +129,8 @@ void sheet_free(struct SHEET *sht){
     return;
 }
 
-void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1){
+void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, int h0){
+    // h0->自h0以上刷新
     int h, bx, by, bx0, by0, bx1, by1, vx, vy;
     unsigned char *buf;
     unsigned char c;        //缓存图像信息方便判断
@@ -148,7 +149,7 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1){
     if (vy1 > ctl->ysize) {
         vy1 = ctl->ysize;
     }
-    for (h = 0; h <= ctl->top; h++) {   //包含顶层
+    for (h = h0; h <= ctl->top; h++) {   //包含顶层
         sht = ctl->sheets[h];
         buf = sht->buf;
         // 由vxy倒推bxy范围
