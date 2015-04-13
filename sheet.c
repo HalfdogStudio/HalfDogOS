@@ -200,7 +200,7 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
             vy = sht->vy0 + by;
             for (bx = bx0; bx < bx1; bx++) {
                 vx = sht->vx0 + bx;
-                c = map[vy * sht->bxsize + vx]; //map v 不是b
+                c = map[vy * ctl->xsize + vx]; //map v 不是b
                 if (c == sid) {
                     vram[vy * ctl->xsize + vx] = buf[by * sht->bxsize + bx];
                 }
