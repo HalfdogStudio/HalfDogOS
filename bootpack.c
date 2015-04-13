@@ -19,6 +19,8 @@ void HalfDogMain(void){
     struct SHTCTL *shtctl;
     struct SHEET *sht_back, *sht_mouse, *sht_win;
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
+    // 计数器
+    int count = 0;
 
     init_gdtidt();
     init_pic();
@@ -46,19 +48,19 @@ void HalfDogMain(void){
     sht_win = sheet_alloc(shtctl);
 
     buf_back = (unsigned char *)memman_alloc_4k(memman, binfo->scrnx * binfo->scrny);   //320*200字节
-    buf_win = (unsigned char *)memman_alloc_4k(memman, 160 * 8);
+    buf_win = (unsigned char *)memman_alloc_4k(memman, 160 * 52);
 
     sheet_setbuf(sht_back, buf_back, binfo->scrnx, binfo->scrny, -1);   //没有透明色
     sheet_setbuf(sht_mouse, buf_mouse, 16, 16, 99); //透明色号99
-    sheet_setbuf(sht_win, buf_win, 160, 68, -1);    //没有透明色
+    sheet_setbuf(sht_win, buf_win, 160, 52, -1);    //没有透明色
 
     init_screen8(buf_back, binfo->scrnx, binfo->scrny);
 
     init_mouse_cursor8(buf_mouse, 99);
 
-    make_window8(buf_win, 160, 68, "window");
-    putfont8_asc(buf_win, 160, 24, 28, COL8_BLACK, "Welcome to");
-    putfont8_asc(buf_win, 160, 24, 44, COL8_BLACK, "HalfDog OS!");
+    make_window8(buf_win, 160, 52, "counter");
+    //putfont8_asc(buf_win, 160, 24, 28, COL8_BLACK, "Welcome to");
+    //putfont8_asc(buf_win, 160, 24, 44, COL8_BLACK, "HalfDog OS!");
 
     sheet_slide(sht_back, 0, 0);    //背景
 
@@ -81,6 +83,13 @@ void HalfDogMain(void){
     sheet_refresh(sht_back, 3, 33, binfo->scrnx, binfo->scrny);
 
     for(;;){
+        // 计数器
+        count++;
+        sprintf(s, "%010d", count);
+        boxfill8(buf_win, 160, COL8_GRAY, 40, 28, 119, 43);
+        putfont8_asc(buf_win, 160, 40, 28, COL8_BLACK, s);
+        sheet_refresh(sht_win, 40, 28, 120, 44);
+        // 计数器结束
         io_cli();                   //禁止中断
         if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) == 0){      // keybuf为空
             io_stihlt();            //恢复允许中断并等待
