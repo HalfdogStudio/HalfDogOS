@@ -136,6 +136,15 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
 void sheet_slide(struct SHEET *sht, int vx0, int vy0);
 void sheet_free(struct SHEET *sht);
 void sheet_refreshmap(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, int h0);
+
+// 计时器Programable interval Timer
+#define PIT_CTRL 0x0043
+#define PIT_CNT0 0x0040
+
+void init_pit(void);
+void inthandler20(int *esp);
+void asm_inthandler20(void);
+
 // 启动信息
 struct BOOTINFO {
     char cyls, leds, vmode, reserve;

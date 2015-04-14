@@ -25,6 +25,9 @@ void HalfDogMain(void){
     init_gdtidt();
     init_pic();
     io_sti(); //IDT／PIC 的初始化完成，于是开放CPU中断
+
+    init_pit();
+
     io_out8(PIC0_IMR, 0xf9); // 开放 PIC1, 键盘终端, 计时器 11111001
     io_out8(PIC1_IMR, 0xef);    // 开放0x2c 8+3=11 11101111
 

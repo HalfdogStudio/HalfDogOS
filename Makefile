@@ -1,13 +1,13 @@
 AS = nasm
 ASFLAGS = -f bin
 CC = gcc
-OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o libosdevc.a
+OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o libosdevc.a
 CFLAGS = -c -m32 -nostartfiles -fno-stack-protector -ffreestanding
 
 all: halfdogos.bin
 
 run: halfdogos.bin
-	qemu-system-x86_64 -m 32 -fda boot.img
+	qemu-system-x86_64 -m 32 -cpu coreduo -fda boot.img
 	#bochs -f bochsrc.txt -q
 
 boot.img: boot.asm

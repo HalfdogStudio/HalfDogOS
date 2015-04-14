@@ -21,6 +21,8 @@ void init_gdtidt(void){
     set_gatedesc(idt + 0x21, (unsigned int) asm_inthandler21, 2 * 8, AR_INTGATE32); // seg 2 is code
     // 注册鼠标中断
     set_gatedesc(idt + 0x2c, (unsigned int) asm_inthandler2c, 2 * 8, AR_INTGATE32); // seg 2 is code
+    // 注册定时器中断
+    set_gatedesc(idt + 0x20, (unsigned int) asm_inthandler20, 2 * 8, AR_INTGATE32); // seg 2 is code
 
     return;
 }
