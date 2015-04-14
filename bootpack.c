@@ -19,8 +19,6 @@ void HalfDogMain(void){
     struct SHTCTL *shtctl;
     struct SHEET *sht_back, *sht_mouse, *sht_win;
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
-    // 计数器
-    int count = 0;
 
     init_gdtidt();
     init_pic();
@@ -28,7 +26,7 @@ void HalfDogMain(void){
 
     init_pit();
 
-    io_out8(PIC0_IMR, 0xf9); // 开放 PIC1, 键盘终端, 计时器 11111001
+    io_out8(PIC0_IMR, 0xf8); // 开放 PIC1, 键盘终端, 计时器 11111000
     io_out8(PIC1_IMR, 0xef);    // 开放0x2c 8+3=11 11101111
 
     fifo8_init(&keyinfo, 32, keybuf);
@@ -87,8 +85,7 @@ void HalfDogMain(void){
 
     for(;;){
         // 计数器
-        count++;
-        sprintf(s, "%010d", count);
+        sprintf(s, "%010d", timerctl.count);
         boxfill8(buf_win, 160, COL8_GRAY, 40, 28, 119, 43);
         putfont8_asc(buf_win, 160, 40, 28, COL8_BLACK, s);
         sheet_refresh(sht_win, 40, 28, 120, 44);

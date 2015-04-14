@@ -145,6 +145,12 @@ void init_pit(void);
 void inthandler20(int *esp);
 void asm_inthandler20(void);
 
+struct TIMERCTL {
+    unsigned int count;
+};
+
+struct TIMERCTL timerctl;
+
 // 启动信息
 struct BOOTINFO {
     char cyls, leds, vmode, reserve;
