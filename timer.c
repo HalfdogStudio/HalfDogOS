@@ -1,5 +1,9 @@
 #include "bootpack.h"
 
+// FIXME: 时刻调整程序
+// 由于timeout可能溢出unsigned int可表示的范围
+// 隔一段时间重新调整下时间
+
 void init_pit(void){
     int i;
     io_out8(PIT_CTRL, 0x34);
@@ -36,7 +40,6 @@ void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data){
 }
 
 void timer_settime(struct TIMER *timer, unsigned int timeout){
-    // FIXME: 时刻调整程序
     int eflags, i, j;
     timer->timeout = timeout + timerctl.count;
     timer->flags = TIMER_FLAGS_USING;
