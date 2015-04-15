@@ -154,7 +154,7 @@ void HalfDogMain(void){
                     }
                     //鼠标位置
                     sprintf(s, "(%3d, %3d)", mx, my);
-                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 63, binfo->scrnx-1, 123);
+                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 63, binfo->scrnx-1, 93);
                     putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
                     // 刷新鼠标状态和位置
                     sheet_refresh(sht_back, 3, 13, 153, 123);

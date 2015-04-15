@@ -8,7 +8,7 @@ void init_pit(void){
     timerctl.count = 0;
     timerctl.next = 0xffffffff;
     for (i = 0; i < MAX_TIMER; i++) {
-        timerctl.timer[i].flags = 0;    //未使用
+        timerctl.timers0[i].flags = 0;    //未使用
     }
     return;
 }
@@ -16,9 +16,9 @@ void init_pit(void){
 struct TIMER *timer_alloc(void){
     int i;
     for (i = 0; i < MAX_TIMER; i++) {
-        if (timerctl.timer[i].flags == 0) {
-            timerctl.timer[i].flags = TIMER_FLAGS_ALLOC;
-            return &timerctl.timer[i];
+        if (timerctl.timers0[i].flags == 0) {
+            timerctl.timers0[i].flags = TIMER_FLAGS_ALLOC;
+            return &timerctl.timers0[i];
         }
     }
     return 0;   //没找到
@@ -37,17 +37,34 @@ void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data){
 
 void timer_settime(struct TIMER *timer, unsigned int timeout){
     // FIXME: 时刻调整程序
+    int eflags, i, j;
     timer->timeout = timeout + timerctl.count;
     timer->flags = TIMER_FLAGS_USING;
-    // 设定超时时更新next
-    if (timerctl.next > timer->timeout){
-        timerctl.next = timer->timeout;
+    // 禁止中断
+    eflags = io_load_eflags();
+    io_cli();
+    //搜索注册timer到ctl.timers位置
+    for (i = 0; i < timerctl.using; i++) {
+        if (timerctl.timers[i]->timeout >= timer->timeout) {
+            break;
+        }
     }
+    //i之后全部后移
+    for (j = timerctl.using; j > i; j--) {  //从i+1到using
+        timerctl.timers[j] = timerctl.timers[j-1];
+    }
+    // IMPORTANT！
+    timerctl.using++;
+    // 把timer放到i上
+    timerctl.timers[i] = timer;
+    //更新next
+    timerctl.next = timerctl.timers[0]->timeout;
+    io_store_eflags(eflags);
     return;
 }
 
 void inthandler20(int *esp){
-    int i;
+    int i, j;
     io_out8(PIC0_OCW2, 0x60);   //把IRQ0信号接收完毕信息通知PIC
     timerctl.count++;
     // 还未到下一个时刻
@@ -55,20 +72,25 @@ void inthandler20(int *esp){
     if (timerctl.next > timerctl.count) {
         return;
     }
-    timerctl.next = 0xffffffff; //赋一个大值
-    for (i = 0; i < MAX_TIMER; i++) {
-        if (timerctl.timer[i].flags == TIMER_FLAGS_USING) {
-            if (timerctl.timer[i].timeout < timerctl.count) {   //发生超时
-                // timeout表示予定时间
-                timerctl.timer[i].flags = TIMER_FLAGS_ALLOC;
-                fifo8_put(timerctl.timer[i].fifo, timerctl.timer[i].data);
-            } else {    // 没有超时
-                if (timerctl.next > timerctl.timer[i].timeout) {
-                    //这个timer的timeout值在前面，则设为next
-                    timerctl.next = timerctl.timer[i].timeout;
-                }
-            }
+    for (i = 0; i < timerctl.using; i++) {
+        if (timerctl.timers[i]->timeout > timerctl.count) {
+            //如果排在下一个的没有超时
+            break;
         }
+        // 超时
+        timerctl.timers[i]->flags = TIMER_FLAGS_ALLOC;
+        fifo8_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
+    }
+    // 正好有i个定时器超时了
+    timerctl.using -= i;
+    for (j = 0; j < timerctl.using; j++) {
+        timerctl.timers[j] = timerctl.timers[i + j];
+    }
+    // 如果还有定时器，next指向下一个
+    if (timerctl.using > 0) {
+        timerctl.next = timerctl.timers[0]->timeout;
+    } else {
+        timerctl.next = 0xffffffff;
     }
     return;
 }
