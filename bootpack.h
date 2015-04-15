@@ -162,6 +162,7 @@ struct TIMER {
 
 struct TIMERCTL {
     unsigned int count;
+    unsigned int next;  //下一个timeout
     struct TIMER timer[MAX_TIMER];
 };
 
