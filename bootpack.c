@@ -19,7 +19,9 @@ void HalfDogMain(void){
     struct SHTCTL *shtctl;
     struct SHEET *sht_back, *sht_mouse, *sht_win;
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
-    char timerbuf[8];   //计时器buffer
+    char timerbuf[8], timerbuf2[8], timerbuf3[8];   //计时器buffer
+    struct TIMER *timer, *timer2, *timer3;
+    struct FIFO8 timerfifo, timerfifo2, timerfifo3;
 
     init_gdtidt();
     init_pic();
@@ -32,8 +34,22 @@ void HalfDogMain(void){
 
     fifo8_init(&keyinfo, 32, keybuf);
     fifo8_init(&mouseinfo, 128, mousebuf);
-    fifo8_init(&timerfifo,8, timerbuf);
-    settimer(1000, &timerfifo, 1);  //设定计时器
+
+    fifo8_init(&timerfifo, 8, timerbuf);
+    timer = timer_alloc();
+    timer_init(timer, &timerfifo, 1);
+    timer_settime(timer, 1000);
+
+    fifo8_init(&timerfifo2, 8, timerbuf2);
+    timer2 = timer_alloc();
+    timer_init(timer2, &timerfifo2, 1);
+    timer_settime(timer2, 300);
+
+    fifo8_init(&timerfifo3, 8, timerbuf3);
+    timer3 = timer_alloc();
+    timer_init(timer3, &timerfifo3, 1);
+    timer_settime(timer3, 50);
+
     init_keyboard();        // 鼠标和键盘控制电路是一个
     enable_mouse(&mdec);
 
@@ -95,7 +111,9 @@ void HalfDogMain(void){
         // 计数器结束
         io_cli();                   //禁止中断
         if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) +
-                fifo8_status(&timerfifo)== 0){      // keybuf为空
+                fifo8_status(&timerfifo) +
+                fifo8_status(&timerfifo2) +
+                fifo8_status(&timerfifo3) == 0){      // keybuf为空
             io_stihlt();            //恢复允许中断并等待
         } else {
             if (fifo8_status(&keyinfo) != 0){
@@ -148,6 +166,23 @@ void HalfDogMain(void){
                 io_sti();
                 putfont8_asc(buf_back, binfo->scrnx, 3, 95, COL8_WHITE, "10[sec]");
                 sheet_refresh(sht_back, 0, 94, 59, 110);
+            } else if (fifo8_status(&timerfifo2) != 0) {
+                i = fifo8_get(&timerfifo2);
+                io_sti();
+                putfont8_asc(buf_back, binfo->scrnx, 3, 125, COL8_WHITE, "3[sec]");
+                sheet_refresh(sht_back, 0, 124, 59, 140);
+            } else if (fifo8_status(&timerfifo3) != 0) {
+                i = fifo8_get(&timerfifo3);
+                io_sti();
+                if (i != 0) {
+                    timer_init(timer3, &timerfifo3, 0);
+                    boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
+                } else {
+                    timer_init(timer3, &timerfifo3, 1);
+                    boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
+                }
+                timer_settime(timer3, 50);
+                sheet_refresh(sht_back, 8, 140, 15, 164);
             }
         }
     }

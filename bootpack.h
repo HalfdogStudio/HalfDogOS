@@ -141,20 +141,31 @@ void sheet_refreshmap(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
 #define PIT_CTRL 0x0043
 #define PIT_CNT0 0x0040
 
+#define MAX_TIMER 500
+#define TIMER_FLAGS_ALLOC 1
+#define TIMER_FLAGS_USING 2
+
 void init_pit(void);
 void inthandler20(int *esp);
 void asm_inthandler20(void);
-void settimer(unsigned int timeout, struct FIFO8 *fifo, char data);
+struct TIMER *timer_alloc(void);
+void timer_free(struct TIMER *timer);
+void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data);
+void timer_settime(struct TIMER *timer, unsigned int timeout);
 
-struct TIMERCTL {
-    unsigned int count;
+struct TIMER {
     unsigned int timeout;
+    unsigned int flags;     //标识TIMER状态
     struct FIFO8 *fifo;
     unsigned char data;
 };
 
+struct TIMERCTL {
+    unsigned int count;
+    struct TIMER timer[MAX_TIMER];
+};
+
 struct TIMERCTL timerctl;
-struct TIMER;
 struct FIFO8 timerfifo;
 
 // 启动信息
