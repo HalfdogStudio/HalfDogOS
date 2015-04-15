@@ -19,6 +19,7 @@ void HalfDogMain(void){
     struct SHTCTL *shtctl;
     struct SHEET *sht_back, *sht_mouse, *sht_win;
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
+    char timerbuf[8];   //计时器buffer
 
     init_gdtidt();
     init_pic();
@@ -31,6 +32,8 @@ void HalfDogMain(void){
 
     fifo8_init(&keyinfo, 32, keybuf);
     fifo8_init(&mouseinfo, 128, mousebuf);
+    fifo8_init(&timerfifo,8, timerbuf);
+    settimer(1000, &timerfifo, 1);  //设定计时器
     init_keyboard();        // 鼠标和键盘控制电路是一个
     enable_mouse(&mdec);
 
@@ -91,7 +94,8 @@ void HalfDogMain(void){
         sheet_refresh(sht_win, 40, 28, 120, 44);
         // 计数器结束
         io_cli();                   //禁止中断
-        if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) == 0){      // keybuf为空
+        if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) +
+                fifo8_status(&timerfifo)== 0){      // keybuf为空
             io_stihlt();            //恢复允许中断并等待
         } else {
             if (fifo8_status(&keyinfo) != 0){
@@ -139,6 +143,11 @@ void HalfDogMain(void){
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
                 }
+            } else if (fifo8_status(&timerfifo) != 0) {
+                i = fifo8_get(&timerfifo);
+                io_sti();
+                putfont8_asc(buf_back, binfo->scrnx, 3, 95, COL8_WHITE, "10[sec]");
+                sheet_refresh(sht_back, 0, 94, 59, 110);
             }
         }
     }

@@ -144,12 +144,18 @@ void sheet_refreshmap(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
 void init_pit(void);
 void inthandler20(int *esp);
 void asm_inthandler20(void);
+void settimer(unsigned int timeout, struct FIFO8 *fifo, char data);
 
 struct TIMERCTL {
     unsigned int count;
+    unsigned int timeout;
+    struct FIFO8 *fifo;
+    unsigned char data;
 };
 
 struct TIMERCTL timerctl;
+struct TIMER;
+struct FIFO8 timerfifo;
 
 // 启动信息
 struct BOOTINFO {
