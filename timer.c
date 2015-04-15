@@ -35,6 +35,7 @@ void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data){
 }
 
 void timer_settime(struct TIMER *timer, unsigned int timeout){
+    // FIXME: 时刻调整程序
     timer->timeout = timeout + timerctl.count;
     timer->flags = TIMER_FLAGS_USING;
     return;
