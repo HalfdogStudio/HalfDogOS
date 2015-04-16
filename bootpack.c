@@ -96,18 +96,15 @@ void HalfDogMain(void){
 
     sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
             memman_total(memman) / 1024);
-    putfont8_asc(buf_back, binfo->scrnx, 3, 33, COL8_WHITE, s);
+    putfont8_asc_sht(sht_back, 3, 33, COL8_WHITE, COL8_DARK_CYAN, s, 28);
 
     sprintf(s, "(%3d, %3d)", mx, my);
-    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
-    sheet_refresh(sht_back, 3, 33, binfo->scrnx, binfo->scrny);
+    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
 
     for(;;){
         // 计数器
         sprintf(s, "%010d", timerctl.count);
-        boxfill8(buf_win, 160, COL8_GRAY, 40, 28, 119, 43);
-        putfont8_asc(buf_win, 160, 40, 28, COL8_BLACK, s);
-        sheet_refresh(sht_win, 40, 28, 120, 44);
+        putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
         // 计数器结束
         io_cli();                   //禁止中断
         if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) +
@@ -154,23 +151,18 @@ void HalfDogMain(void){
                     }
                     //鼠标位置
                     sprintf(s, "(%3d, %3d)", mx, my);
-                    boxfill8(buf_back, binfo->scrnx, COL8_DARK_CYAN, 3, 63, binfo->scrnx-1, 93);
-                    putfont8_asc(buf_back, binfo->scrnx, 3, 63, COL8_WHITE, s);
-                    // 刷新鼠标状态和位置
-                    sheet_refresh(sht_back, 3, 13, 153, 123);
+                    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
                 }
             } else if (fifo8_status(&timerfifo) != 0) {
                 i = fifo8_get(&timerfifo);
                 io_sti();
-                putfont8_asc(buf_back, binfo->scrnx, 3, 95, COL8_WHITE, "10[sec]");
-                sheet_refresh(sht_back, 0, 94, 59, 110);
+                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
             } else if (fifo8_status(&timerfifo2) != 0) {
                 i = fifo8_get(&timerfifo2);
                 io_sti();
-                putfont8_asc(buf_back, binfo->scrnx, 3, 125, COL8_WHITE, "3[sec]");
-                sheet_refresh(sht_back, 0, 124, 59, 140);
+                putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
             } else if (fifo8_status(&timerfifo3) != 0) {
                 i = fifo8_get(&timerfifo3);
                 io_sti();

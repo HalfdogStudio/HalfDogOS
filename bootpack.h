@@ -136,6 +136,7 @@ void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, in
 void sheet_slide(struct SHEET *sht, int vx0, int vy0);
 void sheet_free(struct SHEET *sht);
 void sheet_refreshmap(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, int h0);
+void putfont8_asc_sht(struct SHEET *sht, int x, int y, char c, char b, unsigned char *s, unsigned int l);
 
 // 计时器Programable interval Timer
 #define PIT_CTRL 0x0043

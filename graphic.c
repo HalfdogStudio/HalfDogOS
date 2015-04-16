@@ -112,6 +112,13 @@ void putfont8_asc(unsigned char *vram, int xsize, int x, int y, char c, unsigned
     return;
 }
 
+void putfont8_asc_sht(struct SHEET *sht, int x, int y, char c, char b, unsigned char *s, unsigned int l){
+    boxfill8(sht->buf, sht->bxsize, b, x, y, x + l * 8 - 1, y + 15);
+    putfont8_asc(sht->buf, sht->bxsize, x, y, c, s);
+    sheet_refresh(sht, x, y, x + 8 * l - 1, y + 16);
+    return;
+}
+
 void putfont8_hex(unsigned char *vram, int xsize, int x, int y, char c, unsigned char *s){
     char hex[]="0123456789ABCDEF";
     char output[]="0x00";
