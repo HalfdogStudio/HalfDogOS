@@ -144,72 +144,72 @@ void HalfDogMain(void){
                     putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
-                } else if (i == 10) {
-                    putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
-                } else if (i == 3) {
-                    putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
-                } else if (i == 1) {
-                    timer_init(timer3, &fifo, 0);
-                    boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
-                    timer_settime(timer3, 50);
-                    sheet_refresh(sht_back, 8, 140, 16, 165);
-                } else if (i == 0) {
-                    timer_init(timer3, &fifo, 1);
-                    boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
-                    timer_settime(timer3, 50);
-                    sheet_refresh(sht_back, 8, 140, 16, 165);
                 }
+            } else if (i == 10) {
+                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
+            } else if (i == 3) {
+                putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
+            } else if (i == 1) {
+                timer_init(timer3, &fifo, 0);
+                boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
+                timer_settime(timer3, 50);
+                sheet_refresh(sht_back, 8, 140, 16, 165);
+            } else if (i == 0) {
+                timer_init(timer3, &fifo, 1);
+                boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
+                timer_settime(timer3, 50);
+                sheet_refresh(sht_back, 8, 140, 16, 165);
             }
         }
     }
 }
 
 
-    void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
-        static char closebtn[14][16] = {
-            "OOOOOOOOOOOOOOO@",
-            "OQQQQQQQQQQQQQ$@",
-            "OQQQQQQQQQQQQQ$@",
-            "OQQQ@@QQQQ@@QQ$@",
-            "OQQQQ@@QQ@@QQQ$@",
-            "OQQQQQ@@@@QQQQ$@",
-            "OQQQQQQ@@QQQQQ$@",
-            "OQQQQQ@@@@QQQQ$@",
-            "OQQQQ@@QQ@@QQQ$@",
-            "OQQQ@@QQQQ@@QQ$@",
-            "OQQQQQQQQQQQQQ$@",
-            "OQQQQQQQQQQQQQ$@",
-            "O$$$$$$$$$$$$$$@",
-            "@@@@@@@@@@@@@@@@"
-        };
-        int x, y;
-        char c; //色彩
-        boxfill8(buf, xsize, COL8_GRAY, 0, 0, xsize - 1, 0);
-        boxfill8(buf, xsize, COL8_WHITE, 1, 1, xsize - 2, 1);
-        boxfill8(buf, xsize, COL8_GRAY, 0, 0, 0, ysize - 1);
-        boxfill8(buf, xsize, COL8_WHITE, 1, 1, 1, ysize - 2);
-        boxfill8(buf, xsize, COL8_DARK_GRAY, xsize - 2, 1, xsize - 2, ysize - 2);
-        boxfill8(buf, xsize, COL8_BLACK, xsize - 1, 0, xsize - 1, ysize - 1);
-        boxfill8(buf, xsize, COL8_GRAY, 2, 2, xsize - 3, ysize - 3);
-        boxfill8(buf, xsize, COL8_DARK_BLUE, 3, 3, xsize - 4, 20);
-        boxfill8(buf, xsize, COL8_DARK_GRAY, 1, ysize - 2, xsize - 2, ysize - 2);
-        boxfill8(buf, xsize, COL8_BLACK, 0, ysize - 1, xsize - 1, ysize - 1);
-        putfont8_asc(buf, xsize, 24, 4, COL8_WHITE, title);
-        // 按钮
-        for (y = 0; y < 14; y++) {
-            for (x = 0; x < 16; x++) {
-                c = closebtn[y][x];
-                if (c == '@') {
-                    c = COL8_BLACK;
-                } else if (c == '$') {
-                    c = COL8_DARK_GRAY;
-                } else if (c == 'Q') {
-                    c = COL8_GRAY;
-                } else {
-                    c = COL8_WHITE;
-                }
-                buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
+void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
+    static char closebtn[14][16] = {
+        "OOOOOOOOOOOOOOO@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQ@@QQQQ@@QQ$@",
+        "OQQQQ@@QQ@@QQQ$@",
+        "OQQQQQ@@@@QQQQ$@",
+        "OQQQQQQ@@QQQQQ$@",
+        "OQQQQQ@@@@QQQQ$@",
+        "OQQQQ@@QQ@@QQQ$@",
+        "OQQQ@@QQQQ@@QQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "OQQQQQQQQQQQQQ$@",
+        "O$$$$$$$$$$$$$$@",
+        "@@@@@@@@@@@@@@@@"
+    };
+    int x, y;
+    char c; //色彩
+    boxfill8(buf, xsize, COL8_GRAY, 0, 0, xsize - 1, 0);
+    boxfill8(buf, xsize, COL8_WHITE, 1, 1, xsize - 2, 1);
+    boxfill8(buf, xsize, COL8_GRAY, 0, 0, 0, ysize - 1);
+    boxfill8(buf, xsize, COL8_WHITE, 1, 1, 1, ysize - 2);
+    boxfill8(buf, xsize, COL8_DARK_GRAY, xsize - 2, 1, xsize - 2, ysize - 2);
+    boxfill8(buf, xsize, COL8_BLACK, xsize - 1, 0, xsize - 1, ysize - 1);
+    boxfill8(buf, xsize, COL8_GRAY, 2, 2, xsize - 3, ysize - 3);
+    boxfill8(buf, xsize, COL8_DARK_BLUE, 3, 3, xsize - 4, 20);
+    boxfill8(buf, xsize, COL8_DARK_GRAY, 1, ysize - 2, xsize - 2, ysize - 2);
+    boxfill8(buf, xsize, COL8_BLACK, 0, ysize - 1, xsize - 1, ysize - 1);
+    putfont8_asc(buf, xsize, 24, 4, COL8_WHITE, title);
+    // 按钮
+    for (y = 0; y < 14; y++) {
+        for (x = 0; x < 16; x++) {
+            c = closebtn[y][x];
+            if (c == '@') {
+                c = COL8_BLACK;
+            } else if (c == '$') {
+                c = COL8_DARK_GRAY;
+            } else if (c == 'Q') {
+                c = COL8_GRAY;
+            } else {
+                c = COL8_WHITE;
             }
+            buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
         }
-        return;
     }
+    return;
+}
