@@ -21,7 +21,7 @@ void HalfDogMain(void){
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
     char timerbuf[8], timerbuf2[8], timerbuf3[8];   //计时器buffer
     struct TIMER *timer, *timer2, *timer3;
-    struct FIFO8 timerfifo, timerfifo2, timerfifo3;
+    struct FIFO8 timerfifo;
 
     init_gdtidt();
     init_pic();
@@ -37,17 +37,17 @@ void HalfDogMain(void){
 
     fifo8_init(&timerfifo, 8, timerbuf);
     timer = timer_alloc();
-    timer_init(timer, &timerfifo, 1);
+    timer_init(timer, &timerfifo, 10);
     timer_settime(timer, 1000);
 
-    fifo8_init(&timerfifo2, 8, timerbuf2);
+    fifo8_init(&timerfifo, 8, timerbuf2);
     timer2 = timer_alloc();
-    timer_init(timer2, &timerfifo2, 1);
+    timer_init(timer2, &timerfifo, 3);
     timer_settime(timer2, 300);
 
-    fifo8_init(&timerfifo3, 8, timerbuf3);
+    fifo8_init(&timerfifo, 8, timerbuf3);
     timer3 = timer_alloc();
-    timer_init(timer3, &timerfifo3, 1);
+    timer_init(timer3, &timerfifo, 1);
     timer_settime(timer3, 50);
 
     init_keyboard();        // 鼠标和键盘控制电路是一个
@@ -108,9 +108,7 @@ void HalfDogMain(void){
         // 计数器结束
         io_cli();                   //禁止中断
         if (fifo8_status(&keyinfo) + fifo8_status(&mouseinfo) +
-                fifo8_status(&timerfifo) +
-                fifo8_status(&timerfifo2) +
-                fifo8_status(&timerfifo3) == 0){      // keybuf为空
+                fifo8_status(&timerfifo) == 0){
             io_stihlt();            //恢复允许中断并等待
         } else {
             if (fifo8_status(&keyinfo) != 0){
@@ -157,24 +155,24 @@ void HalfDogMain(void){
                 }
             } else if (fifo8_status(&timerfifo) != 0) {
                 i = fifo8_get(&timerfifo);
+                // 判断是哪个，书中处处伏笔啊
                 io_sti();
-                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
-            } else if (fifo8_status(&timerfifo2) != 0) {
-                i = fifo8_get(&timerfifo2);
-                io_sti();
-                putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
-            } else if (fifo8_status(&timerfifo3) != 0) {
-                i = fifo8_get(&timerfifo3);
-                io_sti();
-                if (i != 0) {
-                    timer_init(timer3, &timerfifo3, 0);
-                    boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
+                if (i == 10) {
+                    putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
+                } else if (i == 3) {
+                    putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
                 } else {
-                    timer_init(timer3, &timerfifo3, 1);
-                    boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
+                    // 判断是0是1
+                    if (i != 0) {
+                        timer_init(timer3, &timerfifo, 0);
+                        boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
+                    } else {
+                        timer_init(timer3, &timerfifo, 1);
+                        boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
+                    }
+                    timer_settime(timer3, 50);
+                    sheet_refresh(sht_back, 8, 140, 16, 165);
                 }
-                timer_settime(timer3, 50);
-                sheet_refresh(sht_back, 8, 140, 16, 165);
             }
         }
     }
