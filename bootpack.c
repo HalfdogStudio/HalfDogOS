@@ -174,7 +174,7 @@ void HalfDogMain(void){
                     boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
                 }
                 timer_settime(timer3, 50);
-                sheet_refresh(sht_back, 8, 140, 15, 164);
+                sheet_refresh(sht_back, 8, 140, 16, 165);
             }
         }
     }
