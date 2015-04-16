@@ -33,7 +33,7 @@ void timer_free(struct TIMER *timer){
     return;
 }
 
-void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data){
+void timer_init(struct TIMER *timer, struct FIFO32 *fifo, int data){
     timer->fifo = fifo;
     timer->data = data;
     return;
@@ -82,7 +82,7 @@ void inthandler20(int *esp){
         }
         // 超时
         timerctl.timers[i]->flags = TIMER_FLAGS_ALLOC;
-        fifo8_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
+        fifo32_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
     }
     // 正好有i个定时器超时了
     timerctl.using -= i;

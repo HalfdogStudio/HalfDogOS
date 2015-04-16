@@ -36,21 +36,21 @@ void init_mouse_cursor8(unsigned char *mouse, char bc);
 void putblock8_8(unsigned char *vram, int vxsize, int pxsize, int pysize,
         int px0, int py0, unsigned char *buf, int bxsize);
 // 中断所需FIFO
-struct FIFO8 {
-    unsigned char *buf;     //缓冲数据
+struct FIFO32 {
+    int *buf;               //缓冲数据
     int p;                  // 写指针
     int q;                  // 读指针
     int size;
     int free;
     int flags;
 };
-void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf);
-int fifo8_put(struct FIFO8 *fifo, unsigned char data);
-int fifo8_get(struct FIFO8 *fifo);
-int fifo8_status(struct FIFO8 *fifo);
+void fifo32_init(struct FIFO32 *fifo, int size, int *buf);
+int fifo32_put(struct FIFO32 *fifo, int data);
+int fifo32_get(struct FIFO32 *fifo);
+int fifo32_status(struct FIFO32 *fifo);
 // 鼠标键盘
-struct FIFO8 keyinfo;   // FIFO8结构体
-struct FIFO8 mouseinfo;   // FIFO8结构体
+struct FIFO32 *keyfifo;   // FIFO32结构体
+struct FIFO32 *mousefifo;   // FIFO32结构体
 #define PORT_KEYDAT 0x0060
 #define PORT_KEYSTA 0x0064
 #define PORT_KEYCMD 0x0064
@@ -67,8 +67,8 @@ struct MOUSE_DEC {
 };
 
 void wait_KBC_sendready(void);
-void init_keyboard(void);
-void enable_mouse(struct MOUSE_DEC *mdec);
+void init_keyboard(struct FIFO32 *fifo, int data0);
+void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec);
 int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat);
 
 // 内存检查
@@ -151,14 +151,14 @@ void inthandler20(int *esp);
 void asm_inthandler20(void);
 struct TIMER *timer_alloc(void);
 void timer_free(struct TIMER *timer);
-void timer_init(struct TIMER *timer, struct FIFO8 *fifo, char data);
+void timer_init(struct TIMER *timer, struct FIFO32 *fifo, int data);
 void timer_settime(struct TIMER *timer, unsigned int timeout);
 
 struct TIMER {
     unsigned int timeout;
     unsigned int flags;     //标识TIMER状态
-    struct FIFO8 *fifo;
-    unsigned char data;
+    struct FIFO32 *fifo;
+    int data;
 };
 
 struct TIMERCTL {
@@ -170,7 +170,7 @@ struct TIMERCTL {
 };
 
 struct TIMERCTL timerctl;
-struct FIFO8 timerfifo;
+struct FIFO32 timerfifo;
 
 // 启动信息
 struct BOOTINFO {
