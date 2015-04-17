@@ -1,0 +1,305 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ADR_BOOTINFO	bootpack.h	183;"	d
+AR_INTGATE32	bootpack.h	184;"	d
+AS	Makefile	/^AS = nasm$/;"	m
+ASFLAGS	Makefile	/^ASFLAGS = -f bin$/;"	m
+BEGIN_PM	asmhead.asm	/^BEGIN_PM:   ;实模式终于开始了$/;"	l
+BOOTINFO	bootpack.h	/^struct BOOTINFO {$/;"	s
+BOOTPACK	asmhead.asm	/^BOOTPACK equ 0x00280000$/;"	d
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -c -m32 -nostartfiles -fno-stack-protector -ffreestanding$/;"	m
+CODE_SEG	gdt.asm	/^CODE_SEG equ gdt_code - gdt_start$/;"	d
+COL8_BLACK	color.h	2;"	d
+COL8_BLUE	color.h	6;"	d
+COL8_CYAN	color.h	8;"	d
+COL8_DARK_BLUE	color.h	14;"	d
+COL8_DARK_CYAN	color.h	16;"	d
+COL8_DARK_GRAY	color.h	17;"	d
+COL8_DARK_GREEN	color.h	12;"	d
+COL8_DARK_MAGENTA	color.h	15;"	d
+COL8_DARK_RED	color.h	11;"	d
+COL8_DARK_YELLO	color.h	13;"	d
+COL8_GRAY	color.h	10;"	d
+COL8_GREEN	color.h	4;"	d
+COL8_MAGENTA	color.h	7;"	d
+COL8_RED	color.h	3;"	d
+COL8_WHITE	color.h	9;"	d
+COL8_YELLO	color.h	5;"	d
+CR0_CACHE_DISABLE	bootpack.h	76;"	d
+DATA_SEG	gdt.asm	/^DATA_SEG equ gdt_data - gdt_start$/;"	d
+DSKCAC	asmhead.asm	/^DSKCAC equ 0x00100000	$/;"	d
+DSKCAC0	asmhead.asm	/^DSKCAC0 equ 0x00008000$/;"	d
+EFLAGS_AC_BIT	bootpack.h	75;"	d
+FIFO32	bootpack.h	/^struct FIFO32 {$/;"	s
+FLAGS_OVERRUN	fifo.c	13;"	d	file:
+FREEINFO	bootpack.h	/^struct FREEINFO {   \/\/ 可用信息$/;"	s
+GATE_DESCRIPTOR	bootpack.h	/^struct GATE_DESCRIPTOR{$/;"	s
+HalfDogMain	bootpack.c	/^void HalfDogMain(void){$/;"	f
+KBC_MODE	bootpack.h	59;"	d
+KEYCMD_SENDTO_MOUSE	bootpack.h	61;"	d
+KEYCMD_WRITE_MODE	bootpack.h	58;"	d
+KEYSTA_SEND_NOTREADY	bootpack.h	57;"	d
+MAX_SHEETS	bootpack.h	115;"	d
+MAX_TIMER	bootpack.h	145;"	d
+MEMMAN	bootpack.h	/^struct MEMMAN {$/;"	s
+MEMMAN_ADDR	bootpack.h	85;"	d
+MEMMAN_FREES	bootpack.h	84;"	d
+MOUSECMD_ENABLE	bootpack.h	62;"	d
+MOUSE_DEC	bootpack.h	/^struct MOUSE_DEC {$/;"	s
+MSG_REAL_MODE	boot.asm	/^MSG_REAL_MODE db "Started in 16-bit Real Mode", 0xa, 0$/;"	d
+OBJECTS	Makefile	/^OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o libosdevc.a$/;"	m
+PIC0_ICW1	bootpack.h	4;"	d
+PIC0_ICW2	bootpack.h	7;"	d
+PIC0_ICW3	bootpack.h	8;"	d
+PIC0_ICW4	bootpack.h	9;"	d
+PIC0_IMR	bootpack.h	6;"	d
+PIC0_OCW2	bootpack.h	5;"	d
+PIC1_ICW1	bootpack.h	10;"	d
+PIC1_ICW2	bootpack.h	13;"	d
+PIC1_ICW3	bootpack.h	14;"	d
+PIC1_ICW4	bootpack.h	15;"	d
+PIC1_IMR	bootpack.h	12;"	d
+PIC1_OCW2	bootpack.h	11;"	d
+PIT_CNT0	bootpack.h	143;"	d
+PIT_CTRL	bootpack.h	142;"	d
+PORT_KEYCMD	bootpack.h	56;"	d
+PORT_KEYDAT	bootpack.h	54;"	d
+PORT_KEYSTA	bootpack.h	55;"	d
+SEGMENT_DESCRIPTOR	bootpack.h	/^struct SEGMENT_DESCRIPTOR{$/;"	s
+SHEET	bootpack.h	/^struct SHEET {$/;"	s
+SHEET_USE	bootpack.h	126;"	d
+SHTCTL	bootpack.h	/^struct SHTCTL {$/;"	s
+TIMER	bootpack.h	/^struct TIMER {$/;"	s
+TIMERCTL	bootpack.h	/^struct TIMERCTL {$/;"	s
+TIMER_FLAGS_ALLOC	bootpack.h	146;"	d
+TIMER_FLAGS_USING	bootpack.h	147;"	d
+VIDEO_MEMORY	pm_print.asm	/^VIDEO_MEMORY equ 0xb8000    ;字符模式下的VRAM$/;"	d
+WHITE_ON_BLACK	pm_print.asm	/^WHITE_ON_BLACK equ 0x0f$/;"	d
+access_right	bootpack.h	/^    char base_mid, access_right;$/;"	m	struct:SEGMENT_DESCRIPTOR
+access_right	bootpack.h	/^    char dw_count, access_right;$/;"	m	struct:GATE_DESCRIPTOR
+addr	bootpack.h	/^    unsigned int addr, size;$/;"	m	struct:FREEINFO
+asm_inthandler20	io.asm	/^asm_inthandler20:$/;"	l
+asm_inthandler21	io.asm	/^asm_inthandler21:$/;"	l
+asm_inthandler2c	io.asm	/^asm_inthandler2c:$/;"	l
+base_high	bootpack.h	/^    char limit_high, base_high;$/;"	m	struct:SEGMENT_DESCRIPTOR
+base_low	bootpack.h	/^    short limit_low, base_low;$/;"	m	struct:SEGMENT_DESCRIPTOR
+base_mid	bootpack.h	/^    char base_mid, access_right;$/;"	m	struct:SEGMENT_DESCRIPTOR
+bios_print_hex	bios_print.asm	/^bios_print_hex:$/;"	l
+bios_print_string	bios_print.asm	/^bios_print_string:$/;"	l
+boxfill8	graphic.c	/^void boxfill8(unsigned char *vram, int xsize, unsigned char c,$/;"	f
+btn	bootpack.h	/^    int x, y, btn;$/;"	m	struct:MOUSE_DEC
+buf	bootpack.h	/^    int *buf;               \/\/缓冲数据$/;"	m	struct:FIFO32
+buf	bootpack.h	/^    unsigned char *buf;     \/\/ 图层内容保存在这里$/;"	m	struct:SHEET
+buf	bootpack.h	/^    unsigned char buf[3], phase;$/;"	m	struct:MOUSE_DEC
+bxsize	bootpack.h	/^    int bxsize, bysize;     \/\/图像大小(缓冲区)$/;"	m	struct:SHEET
+bysize	bootpack.h	/^    int bxsize, bysize;     \/\/图像大小(缓冲区)$/;"	m	struct:SHEET
+call	asmhead.asm	/^call switch_to_pm$/;"	l
+call	switch_to_pm.asm	/^call waitkbdout$/;"	l
+ch_loop	bios_print.asm	/^ch_loop:$/;"	l
+cli	switch_to_pm.asm	/^cli             ;必须禁止中断,因为中断向量表即将改变$/;"	l
+col_inv	bootpack.h	/^    int col_inv;            \/\/透明色$/;"	m	struct:SHEET
+count	bootpack.h	/^    unsigned int count;$/;"	m	struct:TIMERCTL
+ctl	bootpack.h	/^    struct SHTCTL *ctl;$/;"	m	struct:SHEET	typeref:struct:SHEET::SHTCTL
+cyls	asmhead.asm	/^cyls equ 0x0ff0$/;"	d
+cyls	boot.asm	/^cyls equ 10  ; 在bochs中我不能载入超过64个扇区,不知道为什么.参见我的有道云笔记.但qemu可以$/;"	d
+cyls	bootpack.h	/^    char cyls, leds, vmode, reserve;$/;"	m	struct:BOOTINFO
+data	bootpack.h	/^    int data;$/;"	m	struct:TIMER
+db	boot.asm	/^db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x29, 0x44, 0x01, 0x5a, 0x2e, 0x4e, 0x4f, 0x20, 0x4e, 0x41$/;"	l
+db	boot.asm	/^db 0x02, 0xe0, 0x00, 0x40, 0x0b, 0xf0, 0x09, 0x00, 0x12, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00$/;"	l
+db	boot.asm	/^db 0x4d, 0x45, 0x20, 0x20, 0x20, 0x20, 0x46, 0x41, 0x54, 0x31, 0x32, 0x20, 0x20, 0x20$/;"	l
+db	boot.asm	/^db 0x90, 0x6d, 0x6b, 0x66, 0x73, 0x2e, 0x66, 0x61, 0x74, 0x00, 0x02, 0x01, 0x01, 0x00$/;"	l
+disk_error	boot.asm	/^disk_error:$/;"	l
+disk_error_msg	boot.asm	/^disk_error_msg db "Load error:(", 0xa, 0$/;"	d
+dw_count	bootpack.h	/^    char dw_count, access_right;$/;"	m	struct:GATE_DESCRIPTOR
+enable_mouse	mouse.c	/^void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec){$/;"	f
+entry	boot.asm	/^entry:$/;"	l
+extern	io.asm	/^extern inthandler20$/;"	l
+extern	io.asm	/^extern inthandler21$/;"	l
+extern	io.asm	/^extern inthandler2c$/;"	l
+fifo	bootpack.h	/^    struct FIFO32 *fifo;$/;"	m	struct:TIMER	typeref:struct:TIMER::FIFO32
+fifo32_get	fifo.c	/^int fifo32_get(struct FIFO32 *fifo){$/;"	f
+fifo32_init	fifo.c	/^void fifo32_init(struct FIFO32 *fifo, int size, int *buf){$/;"	f
+fifo32_put	fifo.c	/^int fifo32_put(struct FIFO32 *fifo, int data){$/;"	f
+fifo32_status	fifo.c	/^int fifo32_status(struct FIFO32 *fifo){$/;"	f
+finish	bios_print.asm	/^finish:$/;"	l
+flags	bootpack.h	/^    int flags;              \/\/是否在使用$/;"	m	struct:SHEET
+flags	bootpack.h	/^    int flags;$/;"	m	struct:FIFO32
+flags	bootpack.h	/^    unsigned int flags;     \/\/标识TIMER状态$/;"	m	struct:TIMER
+free	bootpack.h	/^    int free;$/;"	m	struct:FIFO32
+free	bootpack.h	/^    struct FREEINFO free[MEMMAN_FREES];$/;"	m	struct:MEMMAN	typeref:struct:MEMMAN::FREEINFO
+frees	bootpack.h	/^    int frees, maxfrees, lostsize, losts;$/;"	m	struct:MEMMAN
+gdt_code	gdt.asm	/^gdt_code: ; code segment descriptor$/;"	l
+gdt_data	gdt.asm	/^gdt_data: ; code segment descriptor$/;"	l
+gdt_descriptor	gdt.asm	/^gdt_descriptor:$/;"	l
+gdt_end	gdt.asm	/^gdt_end:    ;要计算长度$/;"	l
+gdt_null	gdt.asm	/^gdt_null:$/;"	l
+gdt_start	gdt.asm	/^gdt_start:$/;"	l
+global	io.asm	/^global asm_inthandler20$/;"	l
+global	io.asm	/^global asm_inthandler21$/;"	l
+global	io.asm	/^global asm_inthandler2c$/;"	l
+global	io.asm	/^global io_cli$/;"	l
+global	io.asm	/^global io_hlt$/;"	l
+global	io.asm	/^global io_in16$/;"	l
+global	io.asm	/^global io_in32$/;"	l
+global	io.asm	/^global io_in8$/;"	l
+global	io.asm	/^global io_load_eflags$/;"	l
+global	io.asm	/^global io_out16$/;"	l
+global	io.asm	/^global io_out32$/;"	l
+global	io.asm	/^global io_out8$/;"	l
+global	io.asm	/^global io_sti$/;"	l
+global	io.asm	/^global io_stihlt$/;"	l
+global	io.asm	/^global io_store_eflags$/;"	l
+global	io.asm	/^global load_cr0$/;"	l
+global	io.asm	/^global load_gdtr$/;"	l
+global	io.asm	/^global load_idtr$/;"	l
+global	io.asm	/^global store_cr0$/;"	l
+global	io.asm	/^global write_mem8$/;"	l
+hankaku	hankaku.h	/^char hankaku[4096] = {$/;"	v
+height	bootpack.h	/^    int height;             \/\/图层高度$/;"	m	struct:SHEET
+hexloop	bios_print.asm	/^hexloop:$/;"	l
+hexstr	bios_print.asm	/^hexstr db "0123456789ABCDEF"$/;"	d
+inc	bios_print.asm	/^    inc di$/;"	d
+init_gdtidt	desctbl.c	/^void init_gdtidt(void){$/;"	f
+init_keyboard	keyboard.c	/^void init_keyboard(struct FIFO32 *fifo, int data0){$/;"	f
+init_mouse_cursor8	graphic.c	/^void init_mouse_cursor8(unsigned char *mouse, char bc){$/;"	f
+init_palette	graphic.c	/^void init_palette(void){$/;"	f
+init_pic	int.c	/^void init_pic(void){$/;"	f
+init_pit	timer.c	/^void init_pit(void){$/;"	f
+init_pm	switch_to_pm.asm	/^init_pm:$/;"	l
+init_screen8	graphic.c	/^void init_screen8(unsigned char *vram, int xsize, int ysize){$/;"	f
+int	asmhead.asm	/^int 0x10$/;"	l
+int	asmhead.asm	/^int 0x16$/;"	l
+inthandler20	timer.c	/^void inthandler20(int *esp){$/;"	f
+inthandler21	keyboard.c	/^void inthandler21(int *esp){$/;"	f
+inthandler2c	mouse.c	/^void inthandler2c(int *esp){$/;"	f
+io_cli	io.asm	/^io_cli:$/;"	l
+io_hlt	io.asm	/^io_hlt:$/;"	l
+io_in16	io.asm	/^io_in16:     ; int io_int16(int port)$/;"	l
+io_in32	io.asm	/^io_in32:     ; int io_int32(int port)$/;"	l
+io_in8	io.asm	/^io_in8:     ; int io_int8(int port)$/;"	l
+io_load_eflags	io.asm	/^io_load_eflags:     ;int io_load_eflags(void);$/;"	l
+io_out16	io.asm	/^io_out16:     ; int io_out8(int port, short data)$/;"	l
+io_out32	io.asm	/^io_out32:     ; int io_out8(int port, int data)$/;"	l
+io_out8	io.asm	/^io_out8:     ; int io_out8(int port, char data)$/;"	l
+io_sti	io.asm	/^io_sti:$/;"	l
+io_stihlt	io.asm	/^io_stihlt:  ; void io_stihlt(void)$/;"	l
+io_store_eflags	io.asm	/^io_store_eflags:    ;void io_store_eflags(int eflags)$/;"	l
+jmp	boot.asm	/^jmp entry$/;"	l
+keydata0	keyboard.c	/^int keydata0;$/;"	v
+keyfifo	bootpack.h	/^struct FIFO32 *keyfifo;   \/\/ FIFO32结构体$/;"	v	typeref:struct:FIFO32
+leds	asmhead.asm	/^leds equ 0x0ff1$/;"	d
+leds	bootpack.h	/^    char cyls, leds, vmode, reserve;$/;"	m	struct:BOOTINFO
+limit_high	bootpack.h	/^    char limit_high, base_high;$/;"	m	struct:SEGMENT_DESCRIPTOR
+limit_low	bootpack.h	/^    short limit_low, base_low;$/;"	m	struct:SEGMENT_DESCRIPTOR
+load_cr0	io.asm	/^load_cr0:$/;"	l
+load_from_floppy	boot.asm	/^load_from_floppy:$/;"	l
+load_gdtr	io.asm	/^load_gdtr:$/;"	l
+load_idtr	io.asm	/^load_idtr:$/;"	l
+losts	bootpack.h	/^    int frees, maxfrees, lostsize, losts;$/;"	m	struct:MEMMAN
+lostsize	bootpack.h	/^    int frees, maxfrees, lostsize, losts;$/;"	m	struct:MEMMAN
+make_window8	bootpack.c	/^void make_window8(unsigned char *buf, int xsize, int ysize, char *title){$/;"	f
+map	bootpack.h	/^    unsigned char *vram, *map;   \/\/vga缓冲区地址$/;"	m	struct:SHTCTL
+maxfrees	bootpack.h	/^    int frees, maxfrees, lostsize, losts;$/;"	m	struct:MEMMAN
+memcpy	switch_to_pm.asm	/^memcpy:$/;"	l
+memman_alloc	memory.c	/^unsigned int memman_alloc(struct MEMMAN *man, unsigned int size){$/;"	f
+memman_alloc_4k	memory.c	/^unsigned int memman_alloc_4k(struct MEMMAN *man, unsigned int size){$/;"	f
+memman_free	memory.c	/^int memman_free(struct MEMMAN *man, unsigned int addr, unsigned int size){$/;"	f
+memman_free_4k	memory.c	/^int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size){$/;"	f
+memman_init	memory.c	/^void memman_init(struct MEMMAN *man){$/;"	f
+memman_total	memory.c	/^unsigned int memman_total(struct MEMMAN *man){$/;"	f
+memtest	memory.c	/^unsigned int memtest(unsigned int start, unsigned int end){$/;"	f
+memtest_sub	memory.c	/^unsigned int memtest_sub(unsigned int start, unsigned int end){$/;"	f
+mouse_decode	mouse.c	/^int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){$/;"	f
+mousedata0	mouse.c	/^int mousedata0;$/;"	v
+mousefifo	bootpack.h	/^struct FIFO32 *mousefifo;   \/\/ FIFO32结构体$/;"	v	typeref:struct:FIFO32
+mov	asmhead.asm	/^mov [leds], al$/;"	l
+mov	asmhead.asm	/^mov ah, 0x00$/;"	l
+mov	asmhead.asm	/^mov ah, 0x02$/;"	l
+mov	asmhead.asm	/^mov al, 0x13$/;"	l
+mov	asmhead.asm	/^mov al, 0xff$/;"	l
+mov	asmhead.asm	/^mov byte [vmode], 8 ;记录画面模式$/;"	l
+mov	asmhead.asm	/^mov dword [vram], 0x000a0000    ;320x200x8模式下是0xa0000-0xaffff的64kb$/;"	l
+mov	asmhead.asm	/^mov word [scrnx], 320$/;"	l
+mov	asmhead.asm	/^mov word [scrny], 200$/;"	l
+mov	switch_to_pm.asm	/^mov al, 0xd1$/;"	l
+mov	switch_to_pm.asm	/^mov al, 0xdf$/;"	l
+next	boot.asm	/^next:$/;"	l
+next	bootpack.h	/^    unsigned int next;  \/\/下一个timeout$/;"	m	struct:TIMERCTL
+nop	asmhead.asm	/^nop     ;某些奇葩机种不能连续out$/;"	l
+offset_high	bootpack.h	/^    short offset_high;$/;"	m	struct:GATE_DESCRIPTOR
+offset_low	bootpack.h	/^    short offset_low, selector;$/;"	m	struct:GATE_DESCRIPTOR
+out	asmhead.asm	/^out 0x21, al    ;禁止PIC0中断$/;"	l
+out	asmhead.asm	/^out 0xa1, al    ;禁止PIC1中断$/;"	l
+out	switch_to_pm.asm	/^out 0x60, al$/;"	l
+out	switch_to_pm.asm	/^out 0x64, al$/;"	l
+outstr16	bios_print.asm	/^outstr16 db '0x0000', 0xa, 0   ;register value string$/;"	d
+p	bootpack.h	/^    int p;                  \/\/ 写指针$/;"	m	struct:FIFO32
+phase	bootpack.h	/^    unsigned char buf[3], phase;$/;"	m	struct:MOUSE_DEC
+pop	io.asm	/^    pop ds$/;"	d
+print_string_pm	pm_print.asm	/^print_string_pm:$/;"	l
+print_string_pm_done	pm_print.asm	/^print_string_pm_done:$/;"	l
+print_string_pm_loop	pm_print.asm	/^print_string_pm_loop:$/;"	l
+push	io.asm	/^    push ds$/;"	d
+putblock8_8	graphic.c	/^void putblock8_8(unsigned char *vram, int vxsize, int pxsize, int pysize,$/;"	f
+putfont8	graphic.c	/^void putfont8(unsigned char *vram, int xsize, int x, int y, unsigned char c, char *font){$/;"	f
+putfont8_asc	graphic.c	/^void putfont8_asc(unsigned char *vram, int xsize, int x, int y, char c, unsigned char *s){$/;"	f
+putfont8_asc_sht	graphic.c	/^void putfont8_asc_sht(struct SHEET *sht, int x, int y, char c, char b, unsigned char *s, unsigned int l){$/;"	f
+putfont8_hex	graphic.c	/^void putfont8_hex(unsigned char *vram, int xsize, int x, int y, char c, unsigned char *s){$/;"	f
+q	bootpack.h	/^    int q;                  \/\/ 读指针$/;"	m	struct:FIFO32
+read_msg	boot.asm	/^read_msg db "Read disk finished:)", 0xa, 0$/;"	d
+readloop	boot.asm	/^readloop:$/;"	l
+reg16	bios_print.asm	/^reg16   dw  0           ;pass values to bios_print_hex$/;"	d
+reserve	bootpack.h	/^    char cyls, leds, vmode, reserve;$/;"	m	struct:BOOTINFO
+retry	boot.asm	/^retry:$/;"	l
+scrnx	asmhead.asm	/^scrnx equ 0x0ff4$/;"	d
+scrnx	bootpack.h	/^    short scrnx, scrny;$/;"	m	struct:BOOTINFO
+scrny	asmhead.asm	/^scrny equ 0x0ff6$/;"	d
+scrny	bootpack.h	/^    short scrnx, scrny;$/;"	m	struct:BOOTINFO
+selector	bootpack.h	/^    short offset_low, selector;$/;"	m	struct:GATE_DESCRIPTOR
+set_gatedesc	desctbl.c	/^void set_gatedesc(struct GATE_DESCRIPTOR *gd, unsigned int offset, int selector, int ar){$/;"	f
+set_palette	graphic.c	/^void set_palette(int start, int end, unsigned char *rgb){$/;"	f
+set_segmdesc	desctbl.c	/^void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar){$/;"	f
+sheet_alloc	sheet.c	/^struct SHEET *sheet_alloc(struct SHTCTL *ctl){$/;"	f
+sheet_free	sheet.c	/^void sheet_free(struct SHEET *sht){$/;"	f
+sheet_refresh	sheet.c	/^void sheet_refresh(struct SHEET *sht,$/;"	f
+sheet_refreshmap	sheet.c	/^void sheet_refreshmap(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, int h0){$/;"	f
+sheet_refreshsub	sheet.c	/^void sheet_refreshsub(struct SHTCTL *ctl, int vx0, int vy0, int vx1, int vy1, int h0, int h1){$/;"	f
+sheet_setbuf	sheet.c	/^void sheet_setbuf(struct SHEET *sht, unsigned char *buf,$/;"	f
+sheet_slide	sheet.c	/^void sheet_slide(struct SHEET *sht, int vx0, int vy0){$/;"	f
+sheet_updown	sheet.c	/^void sheet_updown(struct SHEET *sht, int height){$/;"	f
+sheets	bootpack.h	/^    struct SHEET *sheets[MAX_SHEETS];   \/\/地址数组,用来按高度排序图层$/;"	m	struct:SHTCTL	typeref:struct:SHTCTL::SHEET
+sheets0	bootpack.h	/^    struct SHEET sheets0[MAX_SHEETS];    \/\/实际保存图层信息$/;"	m	struct:SHTCTL	typeref:struct:SHTCTL::SHEET
+shtctl_init	sheet.c	/^struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize){$/;"	f
+size	bootpack.h	/^    int size;$/;"	m	struct:FIFO32
+size	bootpack.h	/^    unsigned int addr, size;$/;"	m	struct:FREEINFO
+store_cr0	io.asm	/^store_cr0:$/;"	l
+switch_to_pm	switch_to_pm.asm	/^switch_to_pm:$/;"	l
+timeout	bootpack.h	/^    unsigned int timeout;$/;"	m	struct:TIMER
+timer_alloc	timer.c	/^struct TIMER *timer_alloc(void){$/;"	f
+timer_free	timer.c	/^void timer_free(struct TIMER *timer){$/;"	f
+timer_init	timer.c	/^void timer_init(struct TIMER *timer, struct FIFO32 *fifo, int data){$/;"	f
+timer_settime	timer.c	/^void timer_settime(struct TIMER *timer, unsigned int timeout){$/;"	f
+timerctl	bootpack.h	/^struct TIMERCTL timerctl;$/;"	v	typeref:struct:TIMERCTL
+timerfifo	bootpack.h	/^struct FIFO32 timerfifo;$/;"	v	typeref:struct:FIFO32
+timers	bootpack.h	/^    struct TIMER *timers[MAX_TIMER];$/;"	m	struct:TIMERCTL	typeref:struct:TIMERCTL::TIMER
+timers0	bootpack.h	/^    struct TIMER timers0[MAX_TIMER];$/;"	m	struct:TIMERCTL	typeref:struct:TIMERCTL::TIMER
+top	bootpack.h	/^    int top;    \/\/当前最高高度$/;"	m	struct:SHTCTL
+vmode	asmhead.asm	/^vmode equ 0x0ff2$/;"	d
+vmode	bootpack.h	/^    char cyls, leds, vmode, reserve;$/;"	m	struct:BOOTINFO
+vram	asmhead.asm	/^vram equ 0x0ff8$/;"	d
+vram	bootpack.h	/^    char *vram;$/;"	m	struct:BOOTINFO
+vram	bootpack.h	/^    unsigned char *vram, *map;   \/\/vga缓冲区地址$/;"	m	struct:SHTCTL
+vx0	bootpack.h	/^    int vx0, vy0;           \/\/图层位置$/;"	m	struct:SHEET
+vy0	bootpack.h	/^    int vx0, vy0;           \/\/图层位置$/;"	m	struct:SHEET
+wait_KBC_sendready	keyboard.c	/^void wait_KBC_sendready(void){$/;"	f
+waitkbdout	asmhead.asm	/^waitkbdout:$/;"	l
+write_mem8	io.asm	/^write_mem8:$/;"	l
+x	bootpack.h	/^    int x, y, btn;$/;"	m	struct:MOUSE_DEC
+xsize	bootpack.h	/^    int xsize, ysize;$/;"	m	struct:SHTCTL
+y	bootpack.h	/^    int x, y, btn;$/;"	m	struct:MOUSE_DEC
+ysize	bootpack.h	/^    int xsize, ysize;$/;"	m	struct:SHTCTL
