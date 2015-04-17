@@ -4,9 +4,9 @@ CC = gcc
 OBJECTS = bootpack.o io.o graphic.o int.o desctbl.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o libosdevc.a
 CFLAGS = -c -m32 -nostartfiles -fno-stack-protector -ffreestanding
 
-all: halfdogos.bin
+all: halfdogos.bin tags
 
-run: halfdogos.bin
+run: all
 	qemu-system-x86_64 -m 32 -cpu coreduo -fda boot.img
 	#bochs -f bochsrc.txt -q
 
@@ -20,6 +20,9 @@ halfdogos.bin: asmhead.asm boot.img bootpack.bin
 	sudo mv halfdogos.bin fd/
 	sudo mv bootpack.bin fd/
 	sudo umount fd/
+
+tags:
+	ctags -R
 
 io.o:
 	$(AS) -f elf32 io.asm -o io.o

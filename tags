@@ -4,8 +4,8 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ADR_BOOTINFO	bootpack.h	183;"	d
-AR_INTGATE32	bootpack.h	184;"	d
+ADR_BOOTINFO	bootpack.h	184;"	d
+AR_INTGATE32	bootpack.h	185;"	d
 AS	Makefile	/^AS = nasm$/;"	m
 ASFLAGS	Makefile	/^ASFLAGS = -f bin$/;"	m
 BEGIN_PM	asmhead.asm	/^BEGIN_PM:   ;实模式终于开始了$/;"	l
@@ -230,6 +230,7 @@ mov	switch_to_pm.asm	/^mov al, 0xd1$/;"	l
 mov	switch_to_pm.asm	/^mov al, 0xdf$/;"	l
 next	boot.asm	/^next:$/;"	l
 next	bootpack.h	/^    unsigned int next;  \/\/下一个timeout$/;"	m	struct:TIMERCTL
+next_timer	bootpack.h	/^    struct TIMER *next_timer;$/;"	m	struct:TIMER	typeref:struct:TIMER::TIMER
 nop	asmhead.asm	/^nop     ;某些奇葩机种不能连续out$/;"	l
 offset_high	bootpack.h	/^    short offset_high;$/;"	m	struct:GATE_DESCRIPTOR
 offset_low	bootpack.h	/^    short offset_low, selector;$/;"	m	struct:GATE_DESCRIPTOR
@@ -279,6 +280,7 @@ size	bootpack.h	/^    int size;$/;"	m	struct:FIFO32
 size	bootpack.h	/^    unsigned int addr, size;$/;"	m	struct:FREEINFO
 store_cr0	io.asm	/^store_cr0:$/;"	l
 switch_to_pm	switch_to_pm.asm	/^switch_to_pm:$/;"	l
+t0	bootpack.h	/^    struct TIMER *t0;$/;"	m	struct:TIMERCTL	typeref:struct:TIMERCTL::TIMER
 timeout	bootpack.h	/^    unsigned int timeout;$/;"	m	struct:TIMER
 timer_alloc	timer.c	/^struct TIMER *timer_alloc(void){$/;"	f
 timer_free	timer.c	/^void timer_free(struct TIMER *timer){$/;"	f
@@ -286,7 +288,6 @@ timer_init	timer.c	/^void timer_init(struct TIMER *timer, struct FIFO32 *fifo, i
 timer_settime	timer.c	/^void timer_settime(struct TIMER *timer, unsigned int timeout){$/;"	f
 timerctl	bootpack.h	/^struct TIMERCTL timerctl;$/;"	v	typeref:struct:TIMERCTL
 timerfifo	bootpack.h	/^struct FIFO32 timerfifo;$/;"	v	typeref:struct:FIFO32
-timers	bootpack.h	/^    struct TIMER *timers[MAX_TIMER];$/;"	m	struct:TIMERCTL	typeref:struct:TIMERCTL::TIMER
 timers0	bootpack.h	/^    struct TIMER timers0[MAX_TIMER];$/;"	m	struct:TIMERCTL	typeref:struct:TIMERCTL::TIMER
 top	bootpack.h	/^    int top;    \/\/当前最高高度$/;"	m	struct:SHTCTL
 vmode	asmhead.asm	/^vmode equ 0x0ff2$/;"	d

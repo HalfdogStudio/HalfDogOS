@@ -41,57 +41,88 @@ void timer_init(struct TIMER *timer, struct FIFO32 *fifo, int data){
 
 void timer_settime(struct TIMER *timer, unsigned int timeout){
     int eflags, i, j;
+    struct TIMER *s, *t;
     timer->timeout = timeout + timerctl.count;
     timer->flags = TIMER_FLAGS_USING;
     // 禁止中断
     eflags = io_load_eflags();
     io_cli();
+    timerctl.using++;
     //搜索注册timer到ctl.timers位置
-    for (i = 0; i < timerctl.using; i++) {
-        if (timerctl.timers[i]->timeout >= timer->timeout) {
+    // 分四种情况
+    // 1. 链表现在是空，
+    // 2. 插入到最前面
+    // 3. 插入到中间
+    // 注意
+    // 是否要更新timerctl.t0
+    // 是否更新timerctl.next
+    // 更新timer->next_timer
+    if (timerctl.using == 1) {
+        timerctl.t0 = timer;
+        //终止链表
+        timer->next_timer = 0;
+        // 更新timerctl下一个时间
+        timerctl.next = timer->timeout;
+        goto sti;
+    }
+    // 之前有计时器
+    t = timerctl.t0;
+    if (timer->timeout <= t->timeout) {    //计时器应该在当前计时器之前插入
+        timer->next_timer = t;
+        timerctl.t0 = timer;
+        timerctl.next = timer->timeout;
+        goto sti;
+    }
+    for (;;) {
+        // s为前一个
+        s = t;
+        t = t->next_timer;
+        //如果下一个为空
+        if (t == 0) {
             break;
         }
+        if (timer->timeout <= t->timeout) { //插入到s和t之间
+            s->next_timer = timer;
+            timer->next_timer = t;
+            goto sti;
+        }
     }
-    //i之后全部后移
-    for (j = timerctl.using; j > i; j--) {  //从i+1到using
-        timerctl.timers[j] = timerctl.timers[j-1];
-    }
-    // IMPORTANT！
-    timerctl.using++;
-    // 把timer放到i上
-    timerctl.timers[i] = timer;
-    //更新next
-    timerctl.next = timerctl.timers[0]->timeout;
+    // 插入到最后的情况
+    t->next_timer = timer;
+    timer->next_timer = 0;
+sti:
     io_store_eflags(eflags);
     return;
 }
 
 void inthandler20(int *esp){
     int i, j;
+    struct TIMER *timer;
     io_out8(PIC0_OCW2, 0x60);   //把IRQ0信号接收完毕信息通知PIC
     timerctl.count++;
     // 还未到下一个时刻
-    // 通过此策略大大较小不需要的循环和比较
+    // 通过此策略大大减小不需要的循环和比较
     if (timerctl.next > timerctl.count) {
         return;
     }
+    // 将最前面的地址赋给timer
+    timer = timerctl.t0;
     for (i = 0; i < timerctl.using; i++) {
-        if (timerctl.timers[i]->timeout > timerctl.count) {
+        if (timer->timeout > timerctl.count) {
             //如果排在下一个的没有超时
             break;
         }
         // 超时
-        timerctl.timers[i]->flags = TIMER_FLAGS_ALLOC;
-        fifo32_put(timerctl.timers[i]->fifo, timerctl.timers[i]->data);
+        timer->flags = TIMER_FLAGS_ALLOC;
+        fifo32_put(timer->fifo, timer->data);
+        timer = timer->next_timer;
     }
     // 正好有i个定时器超时了
     timerctl.using -= i;
-    for (j = 0; j < timerctl.using; j++) {
-        timerctl.timers[j] = timerctl.timers[i + j];
-    }
+    timerctl.t0 = timer;
     // 如果还有定时器，next指向下一个
     if (timerctl.using > 0) {
-        timerctl.next = timerctl.timers[0]->timeout;
+        timerctl.next = timerctl.t0->timeout;
     } else {
         timerctl.next = 0xffffffff;
     }

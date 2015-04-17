@@ -159,13 +159,14 @@ struct TIMER {
     unsigned int flags;     //标识TIMER状态
     struct FIFO32 *fifo;
     int data;
+    struct TIMER *next_timer;
 };
 
 struct TIMERCTL {
     unsigned int count;
     unsigned int next;  //下一个timeout
     unsigned int using; //相当于sheetctl里top
-    struct TIMER *timers[MAX_TIMER];
+    struct TIMER *t0;
     struct TIMER timers0[MAX_TIMER];
 };
 
