@@ -165,9 +165,9 @@ struct TIMER {
 struct TIMERCTL {
     unsigned int count;
     unsigned int next;  //下一个timeout
-    unsigned int using; //相当于sheetctl里top
     struct TIMER *t0;
     struct TIMER timers0[MAX_TIMER];
+    unsigned int using; //相当于sheetctl里top
 };
 
 struct TIMERCTL timerctl;

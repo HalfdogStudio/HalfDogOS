@@ -22,7 +22,7 @@ void init_pit(void){
     // 设置timerctl
     timerctl.t0 = t;
     timerctl.next = 0xffffffff;
-    timerctl.using = 1;
+    timerctl.using = 0x123f;
     return;
 }
 
@@ -65,26 +65,29 @@ void timer_settime(struct TIMER *timer, unsigned int timeout){
     // 是否更新timerctl.next
     // 更新timer->next_timer
     // 之前有计时器
-    timerctl.using++;
     t = timerctl.t0;
     if (timer->timeout <= t->timeout) {    //计时器应该在当前计时器之前插入
-        timer->next_timer = t;
         timerctl.t0 = timer;
+        timer->next_timer = t;
         timerctl.next = timer->timeout;
-        goto sti;
+        io_store_eflags(eflags);
+        return;
     }
     for (;;) {
         // s为前一个
         s = t;
         t = t->next_timer;
+        if (t == 0) {
+            break;
+        }
         //如果下一个为空
         if (timer->timeout <= t->timeout) { //插入到s和t之间
             s->next_timer = timer;
             timer->next_timer = t;
-            goto sti;
+            io_store_eflags(eflags);
+            return;
         }
     }
-sti:
     io_store_eflags(eflags);
     return;
 }
@@ -101,7 +104,7 @@ void inthandler20(int *esp){
     }
     // 将最前面的地址赋给timer
     timer = timerctl.t0;
-    for (i = 0; i < timerctl.using; i++) {
+    for (;;) {
         if (timer->timeout > timerctl.count) {
             //如果排在下一个的没有超时
             break;
@@ -111,10 +114,10 @@ void inthandler20(int *esp){
         fifo32_put(timer->fifo, timer->data);
         timer = timer->next_timer;
     }
-    timerctl.using -= 1;
     timerctl.t0 = timer;
     // 如果还有定时器，next指向下一个
-    timerctl.next = timer->timeout;
+    timerctl.next = timerctl.t0->timeout;
+    timerctl.using = -1;
     return;
 }
 
