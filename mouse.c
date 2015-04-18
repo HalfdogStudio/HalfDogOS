@@ -1,6 +1,9 @@
 #include "bootpack.h"
+int mousedata0;
 
-void enable_mouse(struct MOUSE_DEC *mdec){
+void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec){
+    mousefifo = fifo;
+    mousedata0 = data0;
     // 激活鼠标
     wait_KBC_sendready();
     io_out8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
@@ -50,14 +53,14 @@ int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){
 }
 
 void inthandler2c(int *esp){
-    unsigned char data;
+    int data;
     //struct BOOTINFO *binfo = (struct BOOTINFO *) ADR_BOOTINFO;
     //boxfill8(binfo->vram, binfo->scrnx, COL8_BLACK, 0, 0, 32 * 8 - 1, 16);
     //putfont8_asc(binfo->vram, binfo->scrnx, 123, 3, COL8_WHITE, "INT 2C (IQR-12) : PS/2 MOUSE");
     io_out8(PIC1_OCW2, 0x64);       // 通知PIC1 IRQ-12已经受理
     io_out8(PIC0_OCW2, 0x62);       // 通知PIC0 IRQ-2已经受理
     data = io_in8(PORT_KEYDAT);
-    fifo8_put(&mouseinfo, data);
+    fifo32_put(mousefifo, data + mousedata0);
     return;
 }
 

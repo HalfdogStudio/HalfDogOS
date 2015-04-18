@@ -1,6 +1,6 @@
 #include "bootpack.h"
 
-void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf){
+void fifo32_init(struct FIFO32 *fifo, int size, int *buf){
     fifo->size = size;
     fifo->buf = buf;
     fifo->free = size;
@@ -12,7 +12,7 @@ void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf){
 
 #define FLAGS_OVERRUN 0x0001
 
-int fifo8_put(struct FIFO8 *fifo, unsigned char data){
+int fifo32_put(struct FIFO32 *fifo, int data){
     //写入一个数据时
     //1. 判断free是否等于0
     //2. 在p处写入并增加p
@@ -31,7 +31,7 @@ int fifo8_put(struct FIFO8 *fifo, unsigned char data){
     return 0;
 }
 
-int fifo8_get(struct FIFO8 *fifo){
+int fifo32_get(struct FIFO32 *fifo){
     //读出一个数据
     //1. 判断free是否和size一样(空fifo)
     //2. 从q处读出并且q++
@@ -50,7 +50,7 @@ int fifo8_get(struct FIFO8 *fifo){
     return data;
 }
 
-int fifo8_status(struct FIFO8 *fifo){
+int fifo32_status(struct FIFO32 *fifo){
     // 报告还有多少数据
     return fifo->size - fifo->free;
 }
