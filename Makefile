@@ -35,4 +35,4 @@ bootpack.bin: $(OBJECTS)
 	#ld -Ttext 0xc600 -Tdata 0xe540 -melf_i386 $(OBJECTS) --oformat binary -o bootpack.bin
 
 clean:
-	rm -rf boot.img halfdogos.bin *.o *.elf
+	rm -rf boot.img halfdogos.bin *.o *.elf *.s
