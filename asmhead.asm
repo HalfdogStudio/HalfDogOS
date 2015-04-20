@@ -35,6 +35,8 @@ scrnx equ 0x0ff4
 scrny equ 0x0ff6
 vram equ 0x0ff8
 
+;------------
+; 320 x 200 画面模式
 mov al, 0x13
 mov ah, 0x00
 int 0x10
@@ -42,6 +44,7 @@ mov byte [vmode], 8 ;记录画面模式
 mov word [scrnx], 320
 mov word [scrny], 200
 mov dword [vram], 0x000a0000    ;320x200x8模式下是0xa0000-0xaffff的64kb
+;---------------
 
 ; 用BIOS取得键盘上各种LED指示灯状态
 mov ah, 0x02
