@@ -117,7 +117,7 @@ void inthandler20(int *esp){
     timerctl.t0 = timer;
     // 如果还有定时器，next指向下一个
     timerctl.next = timerctl.t0->timeout;
-    timerctl.using = 2345;
+    //timerctl.using = 2345;
     return;
 }
 
