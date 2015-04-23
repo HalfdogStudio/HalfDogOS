@@ -50,8 +50,8 @@ init_pm:
     sub ecx, 512/4
     call memcpy
     ; 准备栈
-    mov ebp, 0x00310000        ;更新栈空间
-    mov esp, ebp
+    mov esp, 0x00310000        ;更新栈空间
+    mov ebp, esp
 
     jmp CODE_SEG:BEGIN_PM
 

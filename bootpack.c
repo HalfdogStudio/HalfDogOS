@@ -1,6 +1,7 @@
 #include "bootpack.h"
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title);
+void make_textbox8(struct SHEET* sht, int x0, int y0, int sx, int sy, int c);
 // entry_point
 void HalfDogMain(void){
 
@@ -96,6 +97,12 @@ void HalfDogMain(void){
     sprintf(s, "(%3d, %3d)", mx, my);
     putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
 
+    // 输入处理
+    int cursor_x, cursor_c;
+    /*make_textbox8(sht_win, 8, 28, 144, 16, COL8_WHITE);*/
+    cursor_x = 8;
+    cursor_c = COL8_WHITE;
+
     for (;;) {
         // 计数器
         // 计数器结束
@@ -110,12 +117,19 @@ void HalfDogMain(void){
                 sprintf(s, "%02x", i - 256);
                 putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
                 if (i - 256 < 0x54) {
-                    if(keytable[i - 256] != 0){
+                    if(keytable[i - 256] != 0 && cursor_x < 144){
                         s[0] = keytable[i - 256];
                         s[1] = 0;
-                        putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
+                        putfont8_asc_sht(sht_win, cursor_x, 28, COL8_BLACK, COL8_WHITE, s, 1);
+                        cursor_x += 8;
                     }
                 }
+                if (i - 256 == 0x0e && cursor_x > 8) {      //backspace
+                    //putfont8_asc_sht(sht_win, cursor_x, 28, COL8_BLACK, COL8_WHITE, " ", 1);
+                    //cursor_x -= 8;
+                }
+                boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
+                sheet_refresh(sht_win, cursor_x, 28, cursor_x + 8, 44);
             } else if (512 <= i && i <= 767){
                 // 鼠标数据
                 sprintf(s, "[lcr]", mdec.x, mdec.y);
@@ -156,14 +170,16 @@ void HalfDogMain(void){
                 putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
             } else if (i == 1) {
                 timer_init(timer3, &fifo, 0);
-                boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
+                cursor_c = COL8_BLACK;
+                boxfill8(buf_win, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 44);
                 timer_settime(timer3, 50);
-                sheet_refresh(sht_back, 8, 140, 16, 165);
+                sheet_refresh(sht_win, 8, 140, 16, 165);
             } else if (i == 0) {
                 timer_init(timer3, &fifo, 1);
-                boxfill8(buf_back, sht_back->bxsize, COL8_DARK_CYAN, 8, 140, 15, 164);
+                cursor_c = COL8_WHITE;
+                boxfill8(buf_win, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 44);
                 timer_settime(timer3, 50);
-                sheet_refresh(sht_back, 8, 140, 16, 165);
+                sheet_refresh(sht_win, 8, 140, 16, 165);
             }
         }
     }
@@ -216,5 +232,12 @@ void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
             buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
         }
     }
+    return;
+}
+
+void make_textbox8(struct SHEET* sht, int x0, int y0, int sx, int sy, int c){
+    /*int x1 = x0 + sx;*/
+    /*int y1 = y0 + sy;*/
+    /*boxfill8(sht->buf, sht->bxsize, COL8_GRAY, x0-2, y0-3, x1 + 1, y1-3)*/
     return;
 }

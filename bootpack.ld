@@ -3,12 +3,12 @@ ENTRY(HalfDogMain)
 SECTIONS {
     . = 0xc600;
 
-    .text :
+    .text ALIGN(4):
     {
         *(.text*)
     }
 
-    .data  :
+    .data ALIGN(4):
     {
         *(.data)
     }
