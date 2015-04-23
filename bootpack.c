@@ -1,7 +1,7 @@
 #include "bootpack.h"
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title);
-void make_textbox8(struct SHEET* sht, int x0, int y0, int sx, int sy, int c);
+//void make_textbox8(struct SHEET* sht, int x0, int y0, int sx, int sy, int c);
 // entry_point
 void HalfDogMain(void){
 
@@ -115,21 +115,21 @@ void HalfDogMain(void){
             if (256 <= i && i <= 511) {
                 // 键盘中断
                 sprintf(s, "%02x", i - 256);
-                putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
+                //putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
                 if (i - 256 < 0x54) {
                     if(keytable[i - 256] != 0 && cursor_x < 144){
                         s[0] = keytable[i - 256];
                         s[1] = 0;
-                        putfont8_asc_sht(sht_win, cursor_x, 28, COL8_BLACK, COL8_WHITE, s, 1);
+                        putfont8_asc_sht(sht_win, cursor_x, 28, COL8_BLACK, COL8_WHITE, s, 2);
                         cursor_x += 8;
                     }
                 }
                 if (i - 256 == 0x0e && cursor_x > 8) {      //backspace
-                    //putfont8_asc_sht(sht_win, cursor_x, 28, COL8_BLACK, COL8_WHITE, " ", 1);
-                    //cursor_x -= 8;
+                    putfont8_asc_sht(sht_win, cursor_x-8, 28, COL8_BLACK, COL8_WHITE, " ", 1);
+                    cursor_x -= 8;
                 }
-                boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 7, 43);
-                sheet_refresh(sht_win, cursor_x, 28, cursor_x + 8, 44);
+                boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 43);
+                sheet_refresh(sht_win, cursor_x, 28, cursor_x + 12, 44);
             } else if (512 <= i && i <= 767){
                 // 鼠标数据
                 sprintf(s, "[lcr]", mdec.x, mdec.y);
@@ -168,18 +168,17 @@ void HalfDogMain(void){
                 putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
             } else if (i == 3) {
                 putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
-            } else if (i == 1) {
-                timer_init(timer3, &fifo, 0);
-                cursor_c = COL8_BLACK;
+            } else if (i <= 1) {
+                if (i != 0) {
+                    timer_init(timer3, &fifo, 0);
+                    cursor_c = COL8_BLACK;
+                } else {
+                    timer_init(timer3, &fifo, 1);
+                    cursor_c = COL8_WHITE;
+                }
                 boxfill8(buf_win, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 44);
                 timer_settime(timer3, 50);
-                sheet_refresh(sht_win, 8, 140, 16, 165);
-            } else if (i == 0) {
-                timer_init(timer3, &fifo, 1);
-                cursor_c = COL8_WHITE;
-                boxfill8(buf_win, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 44);
-                timer_settime(timer3, 50);
-                sheet_refresh(sht_win, 8, 140, 16, 165);
+                sheet_refresh(sht_win, cursor_x, 28, cursor_x + 8, 44);
             }
         }
     }
