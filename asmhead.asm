@@ -35,19 +35,67 @@ scrnx equ 0x0ff4
 scrny equ 0x0ff6
 vram equ 0x0ff8
 
-mov al, 0x13
-mov ah, 0x00
+; 画面模式
+vbemode equ 0x105
+
+; 确认VBE是否存在
+mov ax, 0x9000
+mov es, ax      ; es=0x9000
+mov di, 0       ; di=0
+mov ax, 0x4f00  ; ax=0x4f00
 int 0x10
-mov byte [vmode], 8 ;记录画面模式
-mov word [scrnx], 320
-mov word [scrny], 200
-mov dword [vram], 0x000a0000    ;320x200x8模式下是0xa0000-0xaffff的64kb
+cmp ax, 0x004f  ;如果有vbe则变成0x004f
+jne scrn320
+
+; 检查vbe版本
+mov ax, [es:di+4]
+cmp ax, 0x0200  ; vbe>=2.0
+jb scrn320
+
+;取得画面模式信息
+mov cx, vbemode
+mov ax, 0x4f01
+int 0x10
+cmp ax, 0x004f  ;确认下
+jne scrn320
+
+;画面模式信息确认
+cmp byte [es:di+0x19], 8    ;色深位数
+jne scrn320
+cmp byte [es:di+0x1b], 4    ;调色板模式
+jne scrn320
+mov ax, [es:di+0x00]        ;模式属性，bit7要为1
+and ax, 0x0080
+jz scrn320
+
+;画面切换
+mov bx, vbemode+0x4000  ;必须加上0x4000
+mov ax, 0x4f02
+int 0x10
+mov byte [vmode], 8
+mov ax, [es:di+0x12]    ;x
+mov [scrnx], ax
+mov ax, [es:di+0x14]    ;y
+mov [scrny], ax
+mov eax, [es:di+0x28]    ;vram地址
+mov [vram], eax
+jmp keystatus
+
+scrn320:
+    mov al, 0x13
+    mov ah, 0x00
+    int 0x10
+    mov byte [vmode], 8 ;记录画面模式
+    mov word [scrnx], 320
+    mov word [scrny], 200
+    mov dword [vram], 0x000a0000    ;320x200x8模式下是0xa0000-0xaffff的64kb
 
 ; 用BIOS取得键盘上各种LED指示灯状态
-mov ah, 0x02
-int 0x16
-
-mov [leds], al
+keystatus:
+    mov ah, 0x02
+    int 0x16
+    
+    mov [leds], al
 ;--------------------------------
 ; PIC关闭一切中断
 mov al, 0xff
