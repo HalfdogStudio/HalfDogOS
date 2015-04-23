@@ -203,3 +203,20 @@ void load_idtr(int limit, int addr);
 void init_pic(void);
 void asm_inthandler21(void);
 void asm_inthandler2c(void);
+// key table
+// http://wiki.osdev.org/PS/2_Keyboard
+// 0x02:1 down 0x82:1 up
+static char keytable[0x54] = {
+    0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
+    0 , 0,  //backspace tab
+    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']',
+    0, 0,  //enter, left control
+    'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', '`',
+    0,  // left shift
+    '\\', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/',
+    0, '*', //right shift, keypad *
+    0, 0, 0, //left alt space capslock
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //F1~F10
+    0, 0,   //numlock scrolllock
+    '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'
+};

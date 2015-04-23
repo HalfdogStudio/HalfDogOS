@@ -73,7 +73,7 @@ void HalfDogMain(void){
 
     init_mouse_cursor8(buf_mouse, 99);
 
-    make_window8(buf_win, 160, 52, "counter");
+    make_window8(buf_win, 160, 52, "window");
     //putfont8_asc(buf_win, 160, 24, 28, COL8_BLACK, "Welcome to");
     //putfont8_asc(buf_win, 160, 24, 44, COL8_BLACK, "HalfDog OS!");
 
@@ -98,8 +98,6 @@ void HalfDogMain(void){
 
     for (;;) {
         // 计数器
-        sprintf(s, "%010d", timerctl.count);
-        putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
         // 计数器结束
         io_cli();                   //禁止中断
         if (fifo32_status(&fifo) == 0){
@@ -111,6 +109,13 @@ void HalfDogMain(void){
                 // 键盘中断
                 sprintf(s, "%02x", i - 256);
                 putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
+                if (i - 256 < 0x54) {
+                    if(keytable[i - 256] != 0){
+                        s[0] = keytable[i - 256];
+                        s[1] = 0;
+                        putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
+                    }
+                }
             } else if (512 <= i && i <= 767){
                 // 鼠标数据
                 sprintf(s, "[lcr]", mdec.x, mdec.y);
