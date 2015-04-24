@@ -2,7 +2,7 @@
 #include "hankaku.h"
 
 void init_palette(void){
-    static unsigned char table_rgb[] =
+    static const unsigned char table_rgb[] =
     {
         0x00, 0x00, 0x00,   // 0: 黑
         0xff, 0x00, 0x00,   // 1: 亮红
@@ -21,7 +21,7 @@ void init_palette(void){
         0x00, 0x84, 0x84,   // 14: 浅暗蓝
         0x84, 0x84, 0x84    // 15: 暗灰
     };
-    set_palette(0, 15, table_rgb);
+    set_palette(0, 15, (unsigned char *)table_rgb);
     return;
 }
 
@@ -133,7 +133,7 @@ void putfont8_hex(unsigned char *vram, int xsize, int x, int y, char c, unsigned
 void init_mouse_cursor8(unsigned char *mouse, char bc){
     // 我猜要单独设置这个函数就是因为背景会变
     // 先辈筚路蓝缕,以启山林
-    static char cursor[16][16] = {
+    static const char cursor[16][16] = {
         "**************..",
         "*OOOOOOOOOOO*...",
         "*OOOOOOOOOO*....",

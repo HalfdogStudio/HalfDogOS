@@ -90,12 +90,12 @@ void HalfDogMain(void){
     sheet_updown(sht_win, 1);
     sheet_updown(sht_mouse, 2);
 
-    sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
-            memman_total(memman) / 1024);
-    putfont8_asc_sht(sht_back, 3, 33, COL8_WHITE, COL8_DARK_CYAN, s, 28);
+    //sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
+    //        memman_total(memman) / 1024);
+    //putfont8_asc_sht(sht_back, 3, 33, COL8_WHITE, COL8_DARK_CYAN, s, 28);
 
-    sprintf(s, "(%3d, %3d)", mx, my);
-    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
+    //sprintf(s, "(%3d, %3d)", mx, my);
+    //putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
 
     // 输入处理
     int cursor_x, cursor_c;
@@ -114,7 +114,7 @@ void HalfDogMain(void){
             io_sti();               //恢复中断,不因为图像处理阻塞
             if (256 <= i && i <= 511) {
                 // 键盘中断
-                sprintf(s, "%02x", i - 256);
+                //sprintf(s, "%02x", i - 256);
                 //putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
                 if (i - 256 < 0x54) {
                     if(keytable[i - 256] != 0 && cursor_x < 144){
@@ -160,8 +160,8 @@ void HalfDogMain(void){
                         my = binfo->scrny - 1;
                     }
                     //鼠标位置
-                    sprintf(s, "(%3d, %3d)", mx, my);
-                    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
+                    //sprintf(s, "(%3d, %3d)", mx, my);
+                    //putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
                 }
@@ -187,7 +187,7 @@ void HalfDogMain(void){
 
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
-    static char closebtn[14][16] = {
+    static const char closebtn[14][16] = {
         "OOOOOOOOOOOOOOO@",
         "OQQQQQQQQQQQQQ$@",
         "OQQQQQQQQQQQQQ$@",
@@ -227,7 +227,7 @@ void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
             } else if (c == 'Q') {
                 c = COL8_GRAY;
             } else {
-                c = COL8_WHITE;
+                c = COL8_CYAN;
             }
             buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
         }
