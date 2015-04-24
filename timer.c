@@ -23,7 +23,6 @@ void init_pit(void){
     timerctl.t0 = t;
     timerctl.next = 0xffffffff;
     timerctl.using = 1234;
-    io_hlt();
     return;
 }
 
