@@ -125,7 +125,7 @@ void HalfDogMain(void){
                     }
                 }
                 if (i - 256 == 0x0e && cursor_x > 8) {      //backspace
-                    putfont8_asc_sht(sht_win, cursor_x-8, 28, COL8_BLACK, COL8_WHITE, " ", 1);
+                    putfont8_asc_sht(sht_win, cursor_x-8, 28, COL8_BLACK, COL8_WHITE, "  ", 2);
                     cursor_x -= 8;
                 }
                 boxfill8(sht_win->buf, sht_win->bxsize, cursor_c, cursor_x, 28, cursor_x + 2, 43);
