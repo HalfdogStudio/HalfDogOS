@@ -43,7 +43,7 @@ struct FIFO32 {
     int size;
     int free;
     int flags;
-};
+} __attribute__((packed));
 void fifo32_init(struct FIFO32 *fifo, int size, int *buf);
 int fifo32_put(struct FIFO32 *fifo, int data);
 int fifo32_get(struct FIFO32 *fifo);
@@ -64,7 +64,7 @@ struct FIFO32 *mousefifo;   // FIFO32结构体
 struct MOUSE_DEC {
     unsigned char buf[3], phase;
     int x, y, btn;
-};
+} __attribute__((packed));
 
 void wait_KBC_sendready(void);
 void init_keyboard(struct FIFO32 *fifo, int data0);
@@ -86,12 +86,12 @@ unsigned int memtest_sub(unsigned int start, unsigned int end);
 
 struct FREEINFO {   // 可用信息
     unsigned int addr, size;
-};
+} __attribute__((packed));
 
 struct MEMMAN {
     int frees, maxfrees, lostsize, losts;
     struct FREEINFO free[MEMMAN_FREES];
-};
+} __attribute__((packed));
 
 void memman_init(struct MEMMAN *man);
 unsigned int memman_total(struct MEMMAN *man);
@@ -110,7 +110,7 @@ struct SHEET {
     int height;             //图层高度
     int flags;              //是否在使用
     struct SHTCTL *ctl;
-};
+} __attribute__((packed));
 //图层信息管理结构体
 #define MAX_SHEETS 256
 struct SHTCTL {
@@ -119,7 +119,7 @@ struct SHTCTL {
     int top;    //当前最高高度
     struct SHEET *sheets[MAX_SHEETS];   //地址数组,用来按高度排序图层
     struct SHEET sheets0[MAX_SHEETS];    //实际保存图层信息
-};
+} __attribute__((packed));
 // 初始化图层管理结构体
 struct SHTCTL *shtctl_init(struct MEMMAN *memman, unsigned char *vram, int xsize, int ysize);
 //取得新生成的未使用图层
@@ -160,7 +160,7 @@ struct TIMER {
     struct FIFO32 *fifo;
     int data;
     struct TIMER *next_timer;
-};
+} __attribute__((packed));
 
 struct TIMERCTL {
     unsigned int count;
@@ -168,7 +168,7 @@ struct TIMERCTL {
     unsigned int using; //相当于sheetctl里top
     struct TIMER *t0;
     struct TIMER timers0[MAX_TIMER];
-};
+} __attribute__((packed));
 
 struct TIMERCTL timerctl;
 struct FIFO32 timerfifo;
@@ -178,7 +178,7 @@ struct BOOTINFO {
     char cyls, leds, vmode, reserve;
     short scrnx, scrny;
     char *vram;
-};
+} __attribute__((packed));
 
 //权限位, BOOTINFO
 #define ADR_BOOTINFO 0x00000ff0
@@ -189,12 +189,12 @@ struct SEGMENT_DESCRIPTOR{
     short limit_low, base_low;
     char base_mid, access_right;
     char limit_high, base_high;
-};
+} __attribute__((packed));
 struct GATE_DESCRIPTOR{
     short offset_low, selector;
     char dw_count, access_right;
     short offset_high;
-};
+} __attribute__((packed));
 void set_segmdesc(struct SEGMENT_DESCRIPTOR *sd, unsigned int limit, int base, int ar);
 void set_gatedesc(struct GATE_DESCRIPTOR *gd, unsigned int offset, int selector, int ar);
 void init_gdtidt(void);

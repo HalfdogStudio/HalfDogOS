@@ -89,17 +89,17 @@ void HalfDogMain(void){
     sheet_updown(sht_win, 1);
     sheet_updown(sht_mouse, 2);
 
-    sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
-            memman_total(memman) / 1024);
-    putfont8_asc_sht(sht_back, 3, 33, COL8_WHITE, COL8_DARK_CYAN, s, 28);
+    //sprintf(s, "memory %dMB free: %dKB", memtotal / 1024 / 1024,
+    //        memman_total(memman) / 1024);
+    //putfont8_asc_sht(sht_back, 3, 33, COL8_WHITE, COL8_DARK_CYAN, s, 28);
 
-    sprintf(s, "(%3d, %3d)", mx, my);
-    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
+    //sprintf(s, "(%3d, %3d)", mx, my);
+    //putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
 
     for (;;) {
         // 计数器
-        sprintf(s, "%010d", timerctl.count);
-        putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
+        //sprintf(s, "%010d", timerctl.count);
+        //putfont8_asc_sht(sht_win, 40, 28, COL8_BLACK, COL8_GRAY, s, 10);
         // 计数器结束
         io_cli();                   //禁止中断
         if (fifo32_status(&fifo) == 0){
@@ -109,11 +109,17 @@ void HalfDogMain(void){
             io_sti();               //恢复中断,不因为图像处理阻塞
             if (256 <= i && i <= 511) {
                 // 键盘中断
-                sprintf(s, "%02x", i - 256);
-                putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
+                //sprintf(s, "%02x", i - 256);
+                //putfont8_asc_sht(sht_back, 3, 3, COL8_WHITE, COL8_DARK_CYAN, s, 5);
             } else if (512 <= i && i <= 767){
                 // 鼠标数据
-                sprintf(s, "[lcr]", mdec.x, mdec.y);
+                //sprintf(s, "[lcr]", mdec.x, mdec.y);
+                s[0] = '[';
+                s[1] = 'l';
+                s[2] = 'c';
+                s[3] = 'r';
+                s[4] = ']';
+                s[5] = 0 ;
                 if (mouse_decode(&mdec, i - 512) != 0) {
                     if (mdec.btn&0x1 != 0){
                         s[1] = 'L';
@@ -140,15 +146,15 @@ void HalfDogMain(void){
                         my = binfo->scrny - 1;
                     }
                     //鼠标位置
-                    sprintf(s, "(%3d, %3d)", mx, my);
-                    putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
+                    //sprintf(s, "(%3d, %3d)", mx, my);
+                    //putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 15);
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
                 }
             } else if (i == 10) {
-                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
+                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 8);
             } else if (i == 3) {
-                putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
+                putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 7);
             } else if (i == 1) {
                 timer_init(timer3, &fifo, 0);
                 boxfill8(buf_back, sht_back->bxsize, COL8_WHITE, 8, 140, 15, 164);
