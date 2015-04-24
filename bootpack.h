@@ -206,7 +206,7 @@ void asm_inthandler2c(void);
 // key table
 // http://wiki.osdev.org/PS/2_Keyboard
 // 0x02:1 down 0x82:1 up
-static char keytable[0x54] = {
+static const char keytable[0x54] = {
     0, 0, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
     0 , 0,  //backspace tab
     'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']',
