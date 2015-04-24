@@ -132,10 +132,11 @@ void HalfDogMain(void){
                 sheet_refresh(sht_win, cursor_x, 28, cursor_x + 12, 44);
             } else if (512 <= i && i <= 767){
                 // 鼠标数据
-                sprintf(s, "[lcr]", mdec.x, mdec.y);
+                //sprintf(s, "[lcr]", mdec.x, mdec.y);
                 if (mouse_decode(&mdec, i - 512) != 0) {
                     if (mdec.btn&0x1 != 0){
                         s[1] = 'L';
+                        sheet_slide(sht_win, mx, my);
                     }
                     if (mdec.btn>>1&0x1 != 0){
                         s[3] = 'R';
@@ -143,7 +144,7 @@ void HalfDogMain(void){
                     if (mdec.btn>>2&0x1 != 0){
                         s[2] = 'C';
                     }
-                    putfont8_asc_sht(sht_back, 3, 20, COL8_WHITE, COL8_DARK_CYAN, s, 15);
+                    //putfont8_asc_sht(sht_back, 3, 20, COL8_WHITE, COL8_DARK_CYAN, s, 15);
                     mx += mdec.x;
                     my += mdec.y;
                     if (mx < -15) {
