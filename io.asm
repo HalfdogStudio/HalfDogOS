@@ -36,6 +36,7 @@ extern inthandler20
 global load_tr
 ; task switch
 global taskswitch4
+global taskswitch3
 
 ;------------------------------------
 io_hlt:
@@ -177,6 +178,8 @@ store_cr0:
     mov cr0, eax
     ret
 
+;-------------------------
+; 多任务
 ; load_tr
 load_tr:
     ltr [esp+4]
@@ -184,6 +187,10 @@ load_tr:
 ; taskswitch4
 taskswitch4:
     jmp 4*8:0
+    ret
+; taskswitch3
+taskswitch3:
+    jmp 3*8:0
     ret
 
 write_mem8:

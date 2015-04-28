@@ -237,4 +237,5 @@ struct TSS32 tss_a, tss_b;
 
 void load_tr(int tr);
 void taskswitch4(void);
+void taskswitch3(void);
 void task_b_main(void);
