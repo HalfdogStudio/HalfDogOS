@@ -10,6 +10,8 @@ void init_gdtidt(void){
     }
     set_segmdesc(gdt + 1, 0xffffffff, 0x00000000, 0x4092);  //data
     set_segmdesc(gdt + 2, 0x0007ffff, 0x00280000, 0x409a);  //code 512k
+    set_segmdesc(gdt + 3, 103, (int)&tss_a, AR_TSS32);  //code 512k
+    set_segmdesc(gdt + 4, 103, (int)&tss_b, AR_TSS32);  //code 512k
     load_gdtr(0xffff, 0x00270000);
     // IDT初始化, 256个中断
     for (i = 0; i < 256; i++) {

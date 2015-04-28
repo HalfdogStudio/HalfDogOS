@@ -204,3 +204,20 @@ void load_idtr(int limit, int addr);
 void init_pic(void);
 void asm_inthandler21(void);
 void asm_inthandler2c(void);
+
+// TSS
+// task status segment
+#define AR_TSS32 0x0089
+struct TSS32 {
+    int backlink, esp0, ss0, esp1, ss1, esp2, ss2, cr3;
+    int eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    // 段寄存器
+    int es, cs, ss, ds, fs, gs;
+    int ldtr, iomap;
+};
+
+struct TSS32 tss_a, tss_b;
+
+void load_tr(int tr);
+void taskswitch4(void);
+void task_b_main(void);

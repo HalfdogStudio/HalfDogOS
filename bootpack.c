@@ -21,6 +21,8 @@ void HalfDogMain(void){
     unsigned char *buf_back, *buf_win, buf_mouse[16 * 16];    //16x16的鼠标大小
     struct TIMER *timer, *timer2, *timer3;
     struct FIFO32 fifo;
+    // TASK
+    int task_b_esp;
 
     init_gdtidt();
     init_pic();
@@ -64,6 +66,7 @@ void HalfDogMain(void){
 
     buf_back = (unsigned char *)memman_alloc_4k(memman, binfo->scrnx * binfo->scrny);   //320*200字节
     buf_win = (unsigned char *)memman_alloc_4k(memman, 160 * 52);
+    task_b_esp = memman_alloc_4k(memman, 64 * 1024) + 64 * 1024;
 
     sheet_setbuf(sht_back, buf_back, binfo->scrnx, binfo->scrny, -1);   //没有透明色
     sheet_setbuf(sht_mouse, buf_mouse, 16, 16, 99); //透明色号99
@@ -95,6 +98,30 @@ void HalfDogMain(void){
 
     //sprintf(s, "(%3d, %3d)", mx, my);
     //putfont8_asc_sht(sht_back, 3, 63, COL8_WHITE, COL8_DARK_CYAN, s, 14);
+    tss_a.ldtr = 0;
+    tss_a.iomap = 0x40000000;
+    tss_b.ldtr = 0;
+    tss_b.iomap = 0x40000000;
+
+    load_tr(3 * 8);
+
+    //初始化tss_b
+    tss_b.eip = (int) &task_b_main;
+    tss_b.eflags = 0x00000202;  // IF=1, eflags被sti后的值
+    tss_b.ecx = 0;
+    tss_b.edx = 0;
+    tss_b.ebx = 0;
+    tss_b.esp = task_b_esp;
+    tss_b.ebp = 0;
+    tss_b.esi = 0;
+    tss_b.edi = 0;
+    tss_b.es = 1 * 8;
+    tss_b.cs = 2 * 8;
+    tss_b.ss = 1 * 8;
+    tss_b.ds = 1 * 8;
+    tss_b.fs = 1 * 8;
+    tss_b.gs = 1 * 8;
+
 
     for (;;) {
         // 计数器
@@ -153,6 +180,7 @@ void HalfDogMain(void){
                 }
             } else if (i == 10) {
                 putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 8);
+                taskswitch4();
             } else if (i == 3) {
                 putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 7);
             } else if (i == 1) {
@@ -219,3 +247,10 @@ void make_window8(unsigned char *buf, int xsize, int ysize, char *title){
     }
     return;
 }
+
+void task_b_main(void) {
+    for(;;) {
+        io_hlt();
+    }
+}
+
