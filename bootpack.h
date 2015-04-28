@@ -220,4 +220,22 @@ static const char keytable[0x54] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   //F1~F10
     0, 0,   //numlock scrolllock
     '7', '8', '9', '-', '4', '5', '6', '+', '1', '2', '3', '0', '.'
+        ;
 };
+
+// TSS
+// task status segment
+#define AR_TSS32 0x0089
+struct TSS32 {
+    int backlink, esp0, ss0, esp1, ss1, esp2, ss2, cr3;
+    int eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    // 段寄存器
+    int es, cs, ss, ds, fs, gs;
+    int ldtr, iomap;
+};
+
+struct TSS32 tss_a, tss_b;
+
+void load_tr(int tr);
+void taskswitch4(void);
+void task_b_main(void);

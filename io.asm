@@ -32,6 +32,10 @@ global asm_inthandler2c
 extern inthandler2c
 global asm_inthandler20
 extern inthandler20
+; loadtr
+global load_tr
+; task switch
+global taskswitch4
 
 ;------------------------------------
 io_hlt:
@@ -171,6 +175,15 @@ load_cr0:
 store_cr0:
     mov eax, [esp+4]
     mov cr0, eax
+    ret
+
+; load_tr
+load_tr:
+    ltr [esp+4]
+    ret
+; taskswitch4
+taskswitch4:
+    jmp 4*8:0
     ret
 
 write_mem8:
