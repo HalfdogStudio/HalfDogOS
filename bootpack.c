@@ -165,8 +165,8 @@ void HalfDogMain(void){
                     // 移动鼠标
                     sheet_slide(sht_mouse, mx, my);
                 }
-            }else if (i == 10) {
-                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 7);
+            } else if (i == 10) {
+                putfont8_asc_sht(sht_back, 3, 95, COL8_WHITE, COL8_DARK_CYAN, "10[sec]", 8);
             } else if (i == 3) {
                 putfont8_asc_sht(sht_back, 3, 125, COL8_WHITE, COL8_DARK_CYAN, "3[sec]", 6);
             } else if (i <= 1) {
